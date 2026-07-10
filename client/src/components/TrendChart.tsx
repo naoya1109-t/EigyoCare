@@ -17,8 +17,8 @@ export interface Series {
   color?: string;
 }
 
-interface TrendChartProps {
-  data: Record<string, unknown>[];
+interface TrendChartProps<T> {
+  data: T[];
   xKey: string;
   series: Series[];
   type?: "line" | "bar";
@@ -27,13 +27,13 @@ interface TrendChartProps {
 
 const DEFAULT_COLORS = ["#2563eb", "#16a34a", "#d97706", "#dc2626", "#7c3aed"];
 
-export default function TrendChart({
+export default function TrendChart<T extends object>({
   data,
   xKey,
   series,
   type = "line",
   height = 300,
-}: TrendChartProps) {
+}: TrendChartProps<T>) {
   const Chart = type === "bar" ? BarChart : LineChart;
 
   return (

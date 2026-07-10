@@ -51,10 +51,10 @@
 
 ## フェーズ6: 集計・グラフ系メニュー
 
-- [ ] 担当者別売上推移（API: `sales.ts` の `/api/sales/by-rep` ／ 画面: `SalesByRep.tsx`）
-- [ ] 県別売上推移（API: `sales.ts` の `/api/sales/by-prefecture` ／ 画面: `SalesByPrefecture.tsx`）
-- [ ] 担当者別売上対比（API: `sales.ts` の `/api/sales/comparison` ／ 画面: `SalesComparison.tsx`）
-- [ ] 担当者別予算進捗（API: `budget.ts` ／ 画面: `BudgetProgress.tsx`）
+- [x] 担当者別売上推移（API: `sales.ts` の `/api/sales/by-rep` ／ 画面: `SalesByRep.tsx`）
+- [x] 県別売上推移（API: `sales.ts` の `/api/sales/by-prefecture` ／ 画面: `SalesByPrefecture.tsx`）
+- [x] 担当者別売上対比（API: `sales.ts` の `/api/sales/comparison` ／ 画面: `SalesComparison.tsx`）
+- [x] 担当者別予算進捗（API: `budget.ts` ／ 画面: `BudgetProgress.tsx`）
 
 ## フェーズ7: 明細参照系メニュー
 

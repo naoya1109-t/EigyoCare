@@ -5,6 +5,9 @@ import { sessionMiddleware } from "./middlewares/session";
 import { authRouter } from "./routes/auth";
 import { customersRouter } from "./routes/customers";
 import { suppliersRouter } from "./routes/suppliers";
+import { salesRouter } from "./routes/sales";
+import { budgetRouter } from "./routes/budget";
+import { referenceRouter } from "./routes/reference";
 import { getReadonlyPool } from "./db/connection";
 
 const app = express();
@@ -15,6 +18,9 @@ app.use(sessionMiddleware);
 app.use("/api", authRouter);
 app.use("/api", customersRouter);
 app.use("/api", suppliersRouter);
+app.use("/api", salesRouter);
+app.use("/api", budgetRouter);
+app.use("/api", referenceRouter);
 
 app.get("/api/health/db", async (_req, res) => {
   await getReadonlyPool();

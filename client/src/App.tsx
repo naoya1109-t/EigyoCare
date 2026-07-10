@@ -5,6 +5,10 @@ import CustomerList from "./pages/customers/CustomerList";
 import CustomerDetail from "./pages/customers/CustomerDetail";
 import SupplierList from "./pages/suppliers/SupplierList";
 import SupplierDetail from "./pages/suppliers/SupplierDetail";
+import SalesByRep from "./pages/SalesByRep";
+import SalesByPrefecture from "./pages/SalesByPrefecture";
+import SalesComparison from "./pages/SalesComparison";
+import BudgetProgress from "./pages/BudgetProgress";
 import { getCurrentUser } from "./api/session";
 
 function Home() {
@@ -28,6 +32,10 @@ export default function App() {
         <Route path="/customers/:code" element={<CustomerDetail />} />
         <Route path="/suppliers" element={<SupplierList />} />
         <Route path="/suppliers/:code" element={<SupplierDetail />} />
+        <Route path="/sales/by-rep" element={<SalesByRep />} />
+        <Route path="/sales/by-prefecture" element={<SalesByPrefecture />} />
+        <Route path="/sales/comparison" element={<SalesComparison />} />
+        <Route path="/budget-progress" element={<BudgetProgress />} />
       </Routes>
     </BrowserRouter>
   );
