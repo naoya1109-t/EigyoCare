@@ -54,39 +54,35 @@
 
 コード上のプロパティ名・関数名で使用する対応。`development-guidelines.md` の命名規則（camelCase）に従う。
 
-| 日本語 | 英語（コード上のプロパティ名） |
-|---|---|
-| 得意先コード | `customerCode` |
-| 得意先名 | `customerName` |
-| 都道府県 | `prefecture` |
-| 仕入先コード | `supplierCode` |
-| 仕入先名 | `supplierName` |
-| 担当者コード | `repCode` |
-| 担当者名 | `repName` |
-| 売上日 | `saleDate` |
-| 金額 | `amount` |
-| 対象年月 | `targetMonth` |
-| 予算金額 | `budgetAmount` |
-| 請求書番号 | `invoiceNo` |
-| 請求日 | `invoiceDate` |
-| 請求金額 | `invoiceAmount` |
-| 入金日 | `paymentDate` |
-| 入金額 | `paymentAmount` |
-| 売掛金残高 | `receivableBalance` |
-| 返品日 | `returnDate` |
-| 件数 | `count` |
-| 値引日 | `discountDate` |
-| 値引金額 | `discountAmount` |
-| 見積番号 | `quoteNo` |
-| 見積日 | `quoteDate` |
-| ステータス | `status` |
-| 品目 | `item` |
-| 数量 | `quantity` |
-| 単価 | `unitPrice` |
-| ユーザーID | `userId` |
-| パスワードハッシュ | `passwordHash` |
+| 日本語 | 英語（コード上のプロパティ名） | DB物理カラム名（判明分） |
+|---|---|---|
+| 得意先コード | `customerCode` | `得意先CD`（`ET0020得意先`） |
+| 得意先名 | `customerName` | `得意先名`（`ET0020得意先`） |
+| 都道府県 | `prefecture` | `県CD`（`ET0020得意先`）→ `県名`（`ET0001県`） |
+| 仕入先コード | `supplierCode` | `仕入先CD`（`SV0020仕入先`、実体は別DBの`T430仕入先`） |
+| 仕入先名 | `supplierName` | `仕入先名`（`SV0020仕入先`） |
+| 担当者コード | `repCode` | `担当者CD`（`ET0010担当者`, smallint） |
+| 担当者名 | `repName` | `担当者名`（`ET0010担当者`） |
+| 売上日 | `saleDate` | `売上日`（`ET0120請求明細`） |
+| 売上年月 | `salesMonth` | `売上年月`（`ET0100担当者別売上`等） |
+| 金額 | `amount` | `販売金額` / `売上金額`等（テーブルにより異なる） |
+| 予算金額 | `budgetAmount` | `10月`〜`9月`の各列（`ET0170営業担当予算`、ピボット形式） |
+| 請求書番号 | `invoiceNo` | `請求番号`（`ET0110請求`） |
+| 請求日 | `invoiceDate` | `請求日`（`ET0110請求`） |
+| 請求金額 | `invoiceAmount` | `今回請求残高`（`ET0110請求`） |
+| 入金日 | `paymentDate` | `入金日`（`ET0150入金`） |
+| 入金額 | `paymentAmount` | `入金額`（`ET0150入金` / `ET0160入金確認`） |
+| 売掛金残高 | `receivableBalance` | `今回売掛残高`（`ET0130売掛`） |
+| 返品 | `return` | `ET0120請求明細`の`区分='4'`の行（推測、要確認） |
+| 値引金額 | `discountAmount` | `ET0120請求明細`の`区分`IN(`'6'`,`'7'`)の行の`販売金額`（推測、要確認） |
+| 見積番号 | `quoteNo` | 該当テーブルなし（第2目標で新規設計） |
+| 品目 | `item` | `商品名`（`ET0120請求明細`） |
+| 数量 | `quantity` | `受注数量`（`ET0120請求明細`） |
+| 単価 | `unitPrice` | `販売単価`（`ET0120請求明細`） |
+| ユーザーID | `userId` | `ユーザーID`（`app.AppUser`、本アプリ専用テーブル） |
+| パスワードハッシュ | `passwordHash` | `パスワードハッシュ`（`app.AppUser`） |
 
-> **[要確認]** 上記は `functional-design.md` のER図（仮称）を基にした対応であり、実際の基幹システムのカラム名調査後に見直す。
+DBスキーマ調査（2026-07-10実施）により、上記は実際の基幹システム（`SaleDB`）のテーブル・カラム名で確認済み。詳細な物理テーブル対応表・返品/値引コードの解釈（要確認）は`functional-design.md`の「データモデル定義（実テーブル対応表）」を参照。
 
 ## コード上の命名規則
 
