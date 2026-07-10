@@ -16,7 +16,7 @@ authRouter.post("/login", async (req, res) => {
   const result = await pool
     .request()
     .input("userId", sql.NVarChar, userId)
-    .query("SELECT ユーザーID AS userId, パスワードハッシュ AS passwordHash, 担当者コード AS repCode FROM AppUser WHERE ユーザーID = @userId");
+    .query("SELECT ユーザーID AS userId, パスワードハッシュ AS passwordHash, 担当者コード AS repCode FROM app.AppUser WHERE ユーザーID = @userId");
 
   const user = result.recordset[0];
   if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
