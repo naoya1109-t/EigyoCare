@@ -46,8 +46,8 @@
 
 ## フェーズ5: マスタ参照系メニュー
 
-- [ ] 顧客情報一覧・詳細（API: `customers.ts` ／ 画面: `Customers.tsx`）
-- [ ] 仕入先情報一覧・詳細（API: `suppliers.ts` ／ 画面: `Suppliers.tsx`）
+- [x] 顧客情報一覧・詳細（API: `customers.ts` ／ 画面: `Customers.tsx`）
+- [x] 仕入先情報一覧・詳細（API: `suppliers.ts` ／ 画面: `Suppliers.tsx`）
 
 ## フェーズ6: 集計・グラフ系メニュー
 

@@ -1,0 +1,78 @@
+import { Router } from "express";
+import sql from "mssql";
+import { getReadonlyPool } from "../db/connection";
+import { requireAuth } from "../middlewares/requireAuth";
+
+export const customersRouter = Router();
+customersRouter.use(requireAuth);
+
+const LIST_COLUMNS = `
+  c.得意先CD AS customerCode,
+  c.得意先名 AS customerName,
+  c.得意先名カナ AS customerNameKana,
+  p.県名 AS prefecture,
+  c.TEL AS tel,
+  r.担当者名 AS repName
+`;
+
+const DETAIL_COLUMNS = `
+  c.得意先CD AS customerCode,
+  c.得意先名 AS customerName,
+  c.得意先名カナ AS customerNameKana,
+  c.郵便番号 AS zipCode,
+  p.県名 AS prefecture,
+  c.住所1 AS address1,
+  c.住所2 AS address2,
+  c.TEL AS tel,
+  c.FAX AS fax,
+  c.EMail AS email,
+  c.担当者部署 AS contactDept,
+  c.担当者役職 AS contactTitle,
+  c.担当者名 AS contactName,
+  r.担当者名 AS repName,
+  c.締日 AS closingDay,
+  c.最終購買日 AS lastPurchaseDate,
+  c.最終入金日 AS lastPaymentDate
+`;
+
+customersRouter.get("/customers", async (req, res) => {
+  const search = typeof req.query.search === "string" ? req.query.search : "";
+  const pool = await getReadonlyPool();
+  const result = await pool
+    .request()
+    .input("search", sql.NVarChar, `%${search}%`)
+    .query(`
+      SELECT TOP 200 ${LIST_COLUMNS}
+      FROM ET0020得意先 c
+      LEFT JOIN ET0001県 p ON c.県CD = p.県CD
+      LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
+      WHERE c.得意先名 LIKE @search OR c.得意先名カナ LIKE @search
+      ORDER BY c.得意先CD
+    `);
+  res.json(result.recordset);
+});
+
+customersRouter.get("/customers/:code", async (req, res) => {
+  const code = Number(req.params.code);
+  if (!Number.isInteger(code)) {
+    res.status(400).json({ message: "得意先コードが不正です" });
+    return;
+  }
+  const pool = await getReadonlyPool();
+  const result = await pool
+    .request()
+    .input("code", sql.Int, code)
+    .query(`
+      SELECT ${DETAIL_COLUMNS}
+      FROM ET0020得意先 c
+      LEFT JOIN ET0001県 p ON c.県CD = p.県CD
+      LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
+      WHERE c.得意先CD = @code
+    `);
+  const row = result.recordset[0];
+  if (!row) {
+    res.status(404).json({ message: "得意先が見つかりません" });
+    return;
+  }
+  res.json(row);
+});

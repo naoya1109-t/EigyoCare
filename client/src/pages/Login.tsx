@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/auth";
+import { setCurrentUser } from "../api/session";
 import { ApiError } from "../api/client";
 
 export default function Login() {
@@ -15,7 +16,8 @@ export default function Login() {
     setError(null);
     setSubmitting(true);
     try {
-      await login(userId, password);
+      const user = await login(userId, password);
+      setCurrentUser(user);
       navigate("/");
     } catch (err) {
       setError(err instanceof ApiError ? err.message : "ログインに失敗しました");

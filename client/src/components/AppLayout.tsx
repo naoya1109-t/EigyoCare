@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import GlobalNav from "./GlobalNav";
 import { logout } from "../api/auth";
+import { clearCurrentUser } from "../api/session";
 
 interface AppLayoutProps {
   userName: string;
@@ -13,6 +14,7 @@ export default function AppLayout({ userName, children }: AppLayoutProps) {
 
   async function handleLogout() {
     await logout();
+    clearCurrentUser();
     navigate("/login");
   }
 
