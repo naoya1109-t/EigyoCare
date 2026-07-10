@@ -5,35 +5,35 @@
 ## フェーズ0: 事前調査
 
 - [ ] 基幹システムのDBスキーマ調査（得意先・仕入先・売上実績・予算・請求・入金・売掛金・返品・値引の物理テーブル・ビュー名、カラム名を確認し、`functional-design.md` のER図・`glossary.md` の対応表を実スキーマに合わせて更新する）
-- [ ] アプリ用ユーザーテーブル・セッションテーブルの配置場所（専用スキーマの要否）をDBAと調整する
+- [x] アプリ用ユーザーテーブル・セッションテーブルの配置場所（専用スキーマの要否）をDBAと調整する
 - [ ] 参照専用DB接続アカウント、およびセッションテーブル用の書き込み可能DB接続アカウントを発行してもらう
 
 ## フェーズ1: プロジェクト雛形構築
 
-- [ ] `repository-structure.md` に基づき `client/`（Vite + React + TypeScript）を初期化
-- [ ] `repository-structure.md` に基づき `server/`（Express + TypeScript）を初期化
-- [ ] Tailwind CSS のセットアップ（`client/tailwind.config.ts`）
-- [ ] ESLint + Prettier のセットアップ（`client/` `server/` 共通ルール）
-- [ ] `.env.example` の作成（DB接続情報・セッションシークレット等のキー名のみ記載）
-- [ ] `.gitignore` の整備（`node_modules/` `.env` `client/dist/` 等）
-- [ ] GitHubリポジトリ（`https://github.com/naoya1109-t/EigyoCare.git`）への初回コミット・push
+- [x] `repository-structure.md` に基づき `client/`（Vite + React + TypeScript）を初期化
+- [x] `repository-structure.md` に基づき `server/`（Express + TypeScript）を初期化
+- [x] Tailwind CSS のセットアップ（`client/tailwind.config.ts`）
+- [x] ESLint + Prettier のセットアップ（`client/` `server/` 共通ルール）
+- [x] `.env.example` の作成（DB接続情報・セッションシークレット等のキー名のみ記載）
+- [x] `.gitignore` の整備（`node_modules/` `.env` `client/dist/` 等）
+- [x] GitHubリポジトリ（`https://github.com/naoya1109-t/EigyoCare.git`）への初回コミット・push
 
 ## フェーズ2: DB接続基盤
 
-- [ ] `server/src/config/` で環境変数読み込みを実装
-- [ ] `server/src/db/` で SQL Server 接続処理（`mssql` パッケージ、参照用コネクション）を実装
-- [ ] 疎通確認用の簡易エンドポイントで接続確認
+- [x] `server/src/config/` で環境変数読み込みを実装
+- [x] `server/src/db/` で SQL Server 接続処理（`mssql` パッケージ、参照用コネクション）を実装
+- [x] 疎通確認用の簡易エンドポイントで接続確認
 
 ## フェーズ3: 認証基盤
 
-- [ ] SQL Server上にセッションテーブルを作成（自動作成 or DDLスクリプト）
-- [ ] `express-session` + セッションストアアダプタ（`connect-mssql-v2` 等）のセットアップ
-- [ ] アプリユーザーテーブルの作成、パスワードハッシュ化（`bcrypt`）の実装
-- [ ] ログインAPI（`POST /api/login`）の実装
-- [ ] ログアウトAPI（`POST /api/logout`）の実装
-- [ ] 認証チェックミドルウェア（未認証時に401を返す）の実装
-- [ ] ログイン画面（`client/src/pages/Login.tsx`）の実装
-- [ ] 未認証時にログイン画面へリダイレクトする処理をフロントエンドに実装
+- [x] SQL Server上にセッションテーブルを作成（自動作成 or DDLスクリプト）
+- [x] `express-session` + セッションストアアダプタ（`connect-mssql-v2` 等）のセットアップ
+- [x] アプリユーザーテーブルの作成、パスワードハッシュ化（`bcrypt`）の実装
+- [x] ログインAPI（`POST /api/login`）の実装
+- [x] ログアウトAPI（`POST /api/logout`）の実装
+- [x] 認証チェックミドルウェア（未認証時に401を返す）の実装
+- [x] ログイン画面（`client/src/pages/Login.tsx`）の実装
+- [x] 未認証時にログイン画面へリダイレクトする処理をフロントエンドに実装
 
 ## フェーズ4: 共通コンポーネント
 
