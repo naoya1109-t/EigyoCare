@@ -37,12 +37,12 @@
 
 ## フェーズ4: 共通コンポーネント
 
-- [ ] `GlobalNav`（PCサイドメニュー／スマホハンバーガーメニュー、レスポンシブ対応）
-- [ ] `DataTable`（一覧表示共通コンポーネント）
-- [ ] `TrendChart`（Recharts の `LineChart` / `BarChart` ラッパー）
-- [ ] `ProgressGauge`（Recharts の `RadialBarChart` ラッパー）
-- [ ] `FilterForm`（期間指定・担当者選択・得意先検索などの絞り込み共通コンポーネント）
-- [ ] `client/src/api/` にAPI呼び出し共通関数（fetchラッパー、401時のリダイレクト処理を含む）を実装
+- [x] `GlobalNav`（PCサイドメニュー／スマホハンバーガーメニュー、レスポンシブ対応）
+- [x] `DataTable`（一覧表示共通コンポーネント）
+- [x] `TrendChart`（Recharts の `LineChart` / `BarChart` ラッパー）
+- [x] `ProgressGauge`（Recharts の `RadialBarChart` ラッパー）
+- [x] `FilterForm`（期間指定・担当者選択・得意先検索などの絞り込み共通コンポーネント）
+- [x] `client/src/api/` にAPI呼び出し共通関数（fetchラッパー、401時のリダイレクト処理を含む）を実装
 
 ## フェーズ5: マスタ参照系メニュー
 

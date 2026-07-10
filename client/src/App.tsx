@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
+import AppLayout from "./components/AppLayout";
 
 function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50">
+    <AppLayout userName="テストユーザー">
       <div className="rounded-lg bg-white p-8 shadow">
         <h1 className="text-2xl font-bold text-slate-800">EigyoCare</h1>
-        <p className="mt-2 text-slate-500">プロジェクト雛形セットアップ完了</p>
+        <p className="mt-2 text-slate-500">共通コンポーネントのセットアップ完了</p>
       </div>
-    </div>
+    </AppLayout>
   );
 }
 
