@@ -58,11 +58,11 @@
 
 ## フェーズ7: 明細参照系メニュー
 
-- [ ] 請求情報一覧・明細（API: `invoices.ts` ／ 画面: `Invoices.tsx`）
-- [ ] 売掛金一覧（API: `receivables.ts` ／ 画面: `Receivables.tsx`）
-- [ ] 入金確認（API: `payments.ts` ／ 画面: `Payments.tsx`）
-- [ ] 返品（API: `returns.ts` ／ 画面: `Returns.tsx`）
-- [ ] 値引（API: `discounts.ts` ／ 画面: `Discounts.tsx`）
+- [x] 請求情報一覧・明細（API: `invoices.ts` ／ 画面: `Invoices.tsx`）
+- [x] 売掛金一覧（API: `receivables.ts` ／ 画面: `Receivables.tsx`）
+- [x] 入金確認（API: `payments.ts` ／ 画面: `Payments.tsx`）
+- [x] 返品（API: `returns.ts` ／ 画面: `Returns.tsx`）
+- [x] 値引（API: `discounts.ts` ／ 画面: `Discounts.tsx`）
 
 ## フェーズ8: 品質チェック・結合確認
 

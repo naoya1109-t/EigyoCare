@@ -78,13 +78,16 @@ budgetRouter.get("/budget/progress", async (req, res) => {
     actualResult.recordset.map((r: { month: string; salesAmount: number }) => [r.month, r.salesAmount]),
   );
 
+  // 将来月にも断片的な実績行が紛れ込むことがある（バッチ処理途中のデータ等）ため、
+  // 実績の有無ではなく「サーバーの現在日時以前の月かどうか」で経過月を判定する
+  const currentYearMonth = toYearMonth(new Date());
   const monthly = monthlyBudget.map((m) => ({
     month: m.month,
     budgetAmount: m.budgetAmount,
-    actualAmount: actualByMonth.get(m.month) ?? null,
+    actualAmount: m.month <= currentYearMonth ? actualByMonth.get(m.month) ?? 0 : null,
   }));
 
-  const elapsed = monthly.filter((m) => m.actualAmount !== null);
+  const elapsed = monthly.filter((m) => m.month <= currentYearMonth);
   const totalBudget = elapsed.reduce((sum, m) => sum + m.budgetAmount, 0);
   const totalActual = elapsed.reduce((sum, m) => sum + (m.actualAmount ?? 0), 0);
   const achievementRate = totalBudget > 0 ? (totalActual / totalBudget) * 100 : 0;

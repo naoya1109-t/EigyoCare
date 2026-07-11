@@ -8,6 +8,11 @@ import { suppliersRouter } from "./routes/suppliers";
 import { salesRouter } from "./routes/sales";
 import { budgetRouter } from "./routes/budget";
 import { referenceRouter } from "./routes/reference";
+import { invoicesRouter } from "./routes/invoices";
+import { receivablesRouter } from "./routes/receivables";
+import { paymentsRouter } from "./routes/payments";
+import { returnsRouter } from "./routes/returns";
+import { discountsRouter } from "./routes/discounts";
 import { getReadonlyPool } from "./db/connection";
 
 const app = express();
@@ -21,6 +26,11 @@ app.use("/api", suppliersRouter);
 app.use("/api", salesRouter);
 app.use("/api", budgetRouter);
 app.use("/api", referenceRouter);
+app.use("/api", invoicesRouter);
+app.use("/api", receivablesRouter);
+app.use("/api", paymentsRouter);
+app.use("/api", returnsRouter);
+app.use("/api", discountsRouter);
 
 app.get("/api/health/db", async (_req, res) => {
   await getReadonlyPool();

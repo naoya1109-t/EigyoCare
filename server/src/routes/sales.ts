@@ -93,7 +93,7 @@ salesRouter.get("/sales/comparison", async (_req, res) => {
       s.粗利金額 AS grossProfit
     FROM ET0100担当者別売上 s
     JOIN ET0010担当者 r ON s.担当者CD = r.担当者CD
-    WHERE s.売上年月 = (SELECT MAX(売上年月) FROM ET0100担当者別売上)
+    WHERE s.売上年月 = (SELECT MAX(売上年月) FROM (SELECT 売上年月 FROM ET0100担当者別売上 GROUP BY 売上年月 HAVING COUNT(*) > 10) t)
     ORDER BY s.売上金額 DESC
   `);
   res.json(result.recordset);
