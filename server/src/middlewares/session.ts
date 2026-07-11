@@ -1,6 +1,6 @@
 import session from "express-session";
 import { env } from "../config/env";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const MSSQLStore = require("connect-mssql-v2");
 
 const store = new MSSQLStore(

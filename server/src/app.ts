@@ -20,6 +20,15 @@ const app = express();
 app.use(express.json());
 app.use(sessionMiddleware);
 
+// 各フィーチャールーターは router.use(requireAuth) をパス指定なしで適用しているため、
+// /api にマウントされた別ルーターより後ろに置かれた無認証ルートは、途中のルーターの
+// requireAuth に横取りされて到達できない。health/db は意図的に認証不要のため、
+// 認証が必要なルーターより前に登録する。
+app.get("/api/health/db", async (_req, res) => {
+  await getReadonlyPool();
+  res.json({ status: "ok" });
+});
+
 app.use("/api", authRouter);
 app.use("/api", customersRouter);
 app.use("/api", suppliersRouter);
@@ -31,11 +40,6 @@ app.use("/api", receivablesRouter);
 app.use("/api", paymentsRouter);
 app.use("/api", returnsRouter);
 app.use("/api", discountsRouter);
-
-app.get("/api/health/db", async (_req, res) => {
-  await getReadonlyPool();
-  res.json({ status: "ok" });
-});
 
 const clientDist = path.resolve(__dirname, "../../client/dist");
 app.use(express.static(clientDist));

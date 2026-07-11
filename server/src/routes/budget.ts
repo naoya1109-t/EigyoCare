@@ -2,23 +2,10 @@ import { Router } from "express";
 import sql from "mssql";
 import { getReadonlyPool } from "../db/connection";
 import { requireAuth } from "../middlewares/requireAuth";
+import { BUDGET_MONTH_COLUMNS, computeBudgetProgress } from "../services/budgetProgress";
 
 export const budgetRouter = Router();
 budgetRouter.use(requireAuth);
-
-const BUDGET_MONTH_COLUMNS = [
-  "10月", "11月", "12月", "1月", "2月", "3月",
-  "4月", "5月", "6月", "7月", "8月", "9月",
-];
-
-function addMonths(date: Date, n: number): Date {
-  const d = new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth() + n, 1));
-  return d;
-}
-
-function toYearMonth(date: Date): string {
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, "0")}`;
-}
 
 budgetRouter.get("/budget/progress", async (req, res) => {
   const repCode = Number(req.query.repCode);
@@ -59,16 +46,12 @@ budgetRouter.get("/budget/progress", async (req, res) => {
   }
 
   const startDate = new Date(periodRow.開始年月);
-  const monthlyBudget = BUDGET_MONTH_COLUMNS.map((col, i) => ({
-    month: toYearMonth(addMonths(startDate, i)),
-    budgetAmount: Number(budgetRow[col]),
-  }));
 
   const actualResult = await pool
     .request()
     .input("repCode", sql.SmallInt, repCode)
     .input("start", sql.SmallDateTime, startDate)
-    .input("end", sql.SmallDateTime, addMonths(startDate, 12))
+    .input("end", sql.SmallDateTime, new Date(Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth() + 12, 1)))
     .query(`
       SELECT FORMAT(売上年月, 'yyyy-MM') AS month, 売上金額 AS salesAmount
       FROM ET0100担当者別売上
@@ -78,26 +61,11 @@ budgetRouter.get("/budget/progress", async (req, res) => {
     actualResult.recordset.map((r: { month: string; salesAmount: number }) => [r.month, r.salesAmount]),
   );
 
-  // 将来月にも断片的な実績行が紛れ込むことがある（バッチ処理途中のデータ等）ため、
-  // 実績の有無ではなく「サーバーの現在日時以前の月かどうか」で経過月を判定する
-  const currentYearMonth = toYearMonth(new Date());
-  const monthly = monthlyBudget.map((m) => ({
-    month: m.month,
-    budgetAmount: m.budgetAmount,
-    actualAmount: m.month <= currentYearMonth ? actualByMonth.get(m.month) ?? 0 : null,
-  }));
-
-  const elapsed = monthly.filter((m) => m.month <= currentYearMonth);
-  const totalBudget = elapsed.reduce((sum, m) => sum + m.budgetAmount, 0);
-  const totalActual = elapsed.reduce((sum, m) => sum + (m.actualAmount ?? 0), 0);
-  const achievementRate = totalBudget > 0 ? (totalActual / totalBudget) * 100 : 0;
+  const progress = computeBudgetProgress(startDate, budgetRow, actualByMonth, new Date());
 
   res.json({
     period: periodRow.期,
     repCode,
-    monthly,
-    totalBudget,
-    totalActual,
-    achievementRate,
+    ...progress,
   });
 });
