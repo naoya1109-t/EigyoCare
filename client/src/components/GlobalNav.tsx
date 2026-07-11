@@ -35,7 +35,7 @@ export default function GlobalNav({ userName, onLogout }: GlobalNavProps) {
     <>
       {/* PC: サイドメニュー */}
       <aside className="hidden w-60 shrink-0 border-r border-slate-200 bg-white p-4 md:block">
-        <div className="mb-6 text-lg font-bold text-slate-800">EigyoCare</div>
+        <div className="mb-6 text-lg font-bold text-slate-800">営業支援</div>
         <NavLinks />
         <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-600">
           <p className="mb-2">{userName}</p>
@@ -47,7 +47,7 @@ export default function GlobalNav({ userName, onLogout }: GlobalNavProps) {
 
       {/* スマートフォン: ハンバーガーメニュー */}
       <header className="flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 md:hidden">
-        <div className="text-lg font-bold text-slate-800">EigyoCare</div>
+        <div className="text-lg font-bold text-slate-800">営業支援</div>
         <button
           aria-label="メニューを開く"
           onClick={() => setMobileOpen((v) => !v)}

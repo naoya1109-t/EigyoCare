@@ -23,6 +23,8 @@ interface TrendChartProps<T> {
   series: Series[];
   type?: "line" | "bar";
   height?: number;
+  /** "horizontal": カテゴリを縦軸に並べる横棒グラフ。項目数が多いカテゴリ比較に向く */
+  orientation?: "vertical" | "horizontal";
 }
 
 const DEFAULT_COLORS = ["#2563eb", "#16a34a", "#d97706", "#dc2626", "#7c3aed"];
@@ -33,15 +35,26 @@ export default function TrendChart<T extends object>({
   series,
   type = "line",
   height = 300,
+  orientation = "vertical",
 }: TrendChartProps<T>) {
   const Chart = type === "bar" ? BarChart : LineChart;
+  const isHorizontalBars = type === "bar" && orientation === "horizontal";
 
   return (
     <ResponsiveContainer width="100%" height={height}>
-      <Chart data={data}>
+      <Chart data={data} layout={isHorizontalBars ? "vertical" : "horizontal"}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-        <XAxis dataKey={xKey} tick={{ fontSize: 12 }} />
-        <YAxis tick={{ fontSize: 12 }} />
+        {isHorizontalBars ? (
+          <>
+            <XAxis type="number" tick={{ fontSize: 12 }} />
+            <YAxis type="category" dataKey={xKey} tick={{ fontSize: 12 }} width={90} />
+          </>
+        ) : (
+          <>
+            <XAxis dataKey={xKey} tick={{ fontSize: 12 }} />
+            <YAxis tick={{ fontSize: 12 }} />
+          </>
+        )}
         <Tooltip />
         <Legend />
         {series.map((s, i) =>

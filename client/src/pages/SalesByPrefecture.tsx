@@ -2,41 +2,42 @@ import { useEffect, useState } from "react";
 import AppLayout from "../components/AppLayout";
 import TrendChart from "../components/TrendChart";
 import { FilterForm, SelectField } from "../components/FilterForm";
-import { fetchSalesByPrefecture, PrefectureSalesTrendPoint } from "../api/sales";
-import { fetchPrefectures, Prefecture } from "../api/reference";
+import { fetchSalesByPrefecture, fetchPrefectureMonths, PrefectureSalesRow } from "../api/sales";
 import { getCurrentUser } from "../api/session";
 
 export default function SalesByPrefecture() {
-  const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
-  const [prefectureCode, setPrefectureCode] = useState("");
-  const [data, setData] = useState<PrefectureSalesTrendPoint[]>([]);
+  const [months, setMonths] = useState<string[]>([]);
+  const [month, setMonth] = useState("");
+  const [data, setData] = useState<PrefectureSalesRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchPrefectures().then(setPrefectures).catch(() => undefined);
+    fetchPrefectureMonths().then((list) => {
+      setMonths(list);
+      if (list.length > 0) setMonth(list[0]);
+    }).catch(() => undefined);
   }, []);
 
   useEffect(() => {
+    if (!month) return;
     setLoading(true);
-    fetchSalesByPrefecture(prefectureCode, 12)
+    fetchSalesByPrefecture(month)
       .then(setData)
-      .catch(() => setError("売上推移の取得に失敗しました"))
+      .catch(() => setError("県別売上の取得に失敗しました"))
       .finally(() => setLoading(false));
-  }, [prefectureCode]);
+  }, [month]);
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
       <h1 className="mb-4 text-xl font-bold text-slate-800">県別売上推移</h1>
+      <p className="mb-4 text-sm text-slate-500">対象月における都道府県別の売上・粗利を比較します。</p>
       <FilterForm>
         <SelectField
-          label="都道府県"
-          value={prefectureCode}
-          onChange={setPrefectureCode}
-          options={[
-            { value: "", label: "全国計" },
-            ...prefectures.map((p) => ({ value: String(p.prefectureCode), label: p.prefectureName })),
-          ]}
+          label="対象年月"
+          value={month}
+          onChange={setMonth}
+          options={months.map((m) => ({ value: m, label: m }))}
         />
       </FilterForm>
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
@@ -46,7 +47,10 @@ export default function SalesByPrefecture() {
         <div className="rounded border border-slate-200 bg-white p-4">
           <TrendChart
             data={data}
-            xKey="month"
+            xKey="prefectureName"
+            type="bar"
+            orientation="horizontal"
+            height={Math.max(400, data.length * 24)}
             series={[
               { key: "salesAmount", label: "売上金額", color: "#2563eb" },
               { key: "grossProfit", label: "粗利金額", color: "#16a34a" },

@@ -8,9 +8,8 @@ export interface SalesTrendPoint {
   grossProfit: number;
 }
 
-export interface PrefectureSalesTrendPoint {
-  month: string;
-  prefectureCode: number | null;
+export interface PrefectureSalesRow {
+  prefectureCode: number;
   prefectureName: string;
   salesAmount: number;
   grossProfit: number;
@@ -29,13 +28,13 @@ export function fetchSalesByRep(repCode: string, months = 12): Promise<SalesTren
   return apiFetch<SalesTrendPoint[]>(`/sales/by-rep?${params.toString()}`);
 }
 
-export function fetchSalesByPrefecture(
-  prefectureCode: string,
-  months = 12,
-): Promise<PrefectureSalesTrendPoint[]> {
-  const params = new URLSearchParams({ months: String(months) });
-  if (prefectureCode) params.set("prefectureCode", prefectureCode);
-  return apiFetch<PrefectureSalesTrendPoint[]>(`/sales/by-prefecture?${params.toString()}`);
+export function fetchPrefectureMonths(): Promise<string[]> {
+  return apiFetch<string[]>("/sales/prefecture-months");
+}
+
+export function fetchSalesByPrefecture(month: string): Promise<PrefectureSalesRow[]> {
+  const query = month ? `?month=${encodeURIComponent(month)}` : "";
+  return apiFetch<PrefectureSalesRow[]>(`/sales/by-prefecture${query}`);
 }
 
 export function fetchSalesComparison(): Promise<SalesComparisonRow[]> {
