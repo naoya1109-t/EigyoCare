@@ -44,17 +44,18 @@ export default function TrendChart<T extends object>({
     <ResponsiveContainer width="100%" height={height}>
       <Chart data={data} layout={isHorizontalBars ? "vertical" : "horizontal"}>
         <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-        {isHorizontalBars ? (
-          <>
-            <XAxis type="number" tick={{ fontSize: 12 }} />
-            <YAxis type="category" dataKey={xKey} tick={{ fontSize: 12 }} width={90} />
-          </>
-        ) : (
-          <>
-            <XAxis dataKey={xKey} tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} />
-          </>
-        )}
+        <XAxis
+          type={isHorizontalBars ? "number" : "category"}
+          dataKey={isHorizontalBars ? undefined : xKey}
+          tick={{ fontSize: 12 }}
+        />
+        <YAxis
+          type={isHorizontalBars ? "category" : "number"}
+          dataKey={isHorizontalBars ? xKey : undefined}
+          tick={{ fontSize: 12 }}
+          width={isHorizontalBars ? 100 : 60}
+          interval={0}
+        />
         <Tooltip />
         <Legend />
         {series.map((s, i) =>

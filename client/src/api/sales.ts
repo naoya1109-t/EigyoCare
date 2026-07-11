@@ -1,8 +1,7 @@
 import { apiFetch } from "./client";
 
-export interface SalesTrendPoint {
-  month: string;
-  repCode: number | null;
+export interface RepSalesRow {
+  repCode: number;
   repName: string;
   salesAmount: number;
   grossProfit: number;
@@ -22,10 +21,13 @@ export interface SalesComparisonRow {
   grossProfit: number;
 }
 
-export function fetchSalesByRep(repCode: string, months = 12): Promise<SalesTrendPoint[]> {
-  const params = new URLSearchParams({ months: String(months) });
-  if (repCode) params.set("repCode", repCode);
-  return apiFetch<SalesTrendPoint[]>(`/sales/by-rep?${params.toString()}`);
+export function fetchRepMonths(): Promise<string[]> {
+  return apiFetch<string[]>("/sales/rep-months");
+}
+
+export function fetchSalesByRep(month: string): Promise<RepSalesRow[]> {
+  const query = month ? `?month=${encodeURIComponent(month)}` : "";
+  return apiFetch<RepSalesRow[]>(`/sales/by-rep${query}`);
 }
 
 export function fetchPrefectureMonths(): Promise<string[]> {
