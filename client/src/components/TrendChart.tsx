@@ -47,11 +47,13 @@ export default function TrendChart<T extends object>({
         <XAxis
           type={isHorizontalBars ? "number" : "category"}
           dataKey={isHorizontalBars ? undefined : xKey}
+          domain={isHorizontalBars ? [0, "dataMax"] : undefined}
           tick={{ fontSize: 12 }}
         />
         <YAxis
           type={isHorizontalBars ? "category" : "number"}
           dataKey={isHorizontalBars ? xKey : undefined}
+          domain={isHorizontalBars ? undefined : [0, "dataMax"]}
           tick={{ fontSize: 12 }}
           width={isHorizontalBars ? 100 : 60}
           interval={0}
