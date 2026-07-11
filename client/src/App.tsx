@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
 import Login from "./pages/Login";
 import AppLayout from "./components/AppLayout";
 import CustomerList from "./pages/customers/CustomerList";
@@ -31,26 +32,28 @@ function Home() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/customers" element={<CustomerList />} />
-        <Route path="/customers/:code" element={<CustomerDetail />} />
-        <Route path="/suppliers" element={<SupplierList />} />
-        <Route path="/suppliers/:code" element={<SupplierDetail />} />
-        <Route path="/sales/by-rep" element={<SalesByRep />} />
-        <Route path="/sales/by-prefecture" element={<SalesByPrefecture />} />
-        <Route path="/sales/comparison" element={<SalesComparison />} />
-        <Route path="/budget-progress" element={<BudgetProgress />} />
-        <Route path="/invoices" element={<InvoiceList />} />
-        <Route path="/invoices/:no" element={<InvoiceDetail />} />
-        <Route path="/receivables" element={<Receivables />} />
-        <Route path="/payments" element={<PaymentList />} />
-        <Route path="/payments/:customerCode" element={<PaymentDetail />} />
-        <Route path="/returns" element={<Returns />} />
-        <Route path="/discounts" element={<Discounts />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/customers" element={<CustomerList />} />
+          <Route path="/customers/:code" element={<CustomerDetail />} />
+          <Route path="/suppliers" element={<SupplierList />} />
+          <Route path="/suppliers/:code" element={<SupplierDetail />} />
+          <Route path="/sales/by-rep" element={<SalesByRep />} />
+          <Route path="/sales/by-prefecture" element={<SalesByPrefecture />} />
+          <Route path="/sales/comparison" element={<SalesComparison />} />
+          <Route path="/budget-progress" element={<BudgetProgress />} />
+          <Route path="/invoices" element={<InvoiceList />} />
+          <Route path="/invoices/:no" element={<InvoiceDetail />} />
+          <Route path="/receivables" element={<Receivables />} />
+          <Route path="/payments" element={<PaymentList />} />
+          <Route path="/payments/:customerCode" element={<PaymentDetail />} />
+          <Route path="/returns" element={<Returns />} />
+          <Route path="/discounts" element={<Discounts />} />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
