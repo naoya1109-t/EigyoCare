@@ -37,18 +37,24 @@ const DETAIL_COLUMNS = `
 
 customersRouter.get("/customers", async (req, res) => {
   const search = typeof req.query.search === "string" ? req.query.search : "";
+  const prefectureCode = req.query.prefectureCode ? Number(req.query.prefectureCode) : undefined;
+  const repCode = req.query.repCode ? Number(req.query.repCode) : undefined;
+
   const pool = await getReadonlyPool();
-  const result = await pool
-    .request()
-    .input("search", sql.NVarChar, `%${search}%`)
-    .query(`
-      SELECT TOP 200 ${LIST_COLUMNS}
-      FROM ET0020得意先 c
-      LEFT JOIN ET0001県 p ON c.県CD = p.県CD
-      LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
-      WHERE c.得意先名 LIKE @search OR c.得意先名カナ LIKE @search
-      ORDER BY c.得意先CD
-    `);
+  const request = pool.request().input("search", sql.NVarChar, `%${search}%`);
+  if (prefectureCode !== undefined) request.input("prefectureCode", sql.TinyInt, prefectureCode);
+  if (repCode !== undefined) request.input("repCode", sql.SmallInt, repCode);
+
+  const result = await request.query(`
+    SELECT TOP 200 ${LIST_COLUMNS}
+    FROM ET0020得意先 c
+    LEFT JOIN ET0001県 p ON c.県CD = p.県CD
+    LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
+    WHERE (c.得意先名 LIKE @search OR c.得意先名カナ LIKE @search)
+      ${prefectureCode !== undefined ? "AND c.県CD = @prefectureCode" : ""}
+      ${repCode !== undefined ? "AND c.営業担当CD = @repCode" : ""}
+    ORDER BY c.得意先CD
+  `);
   res.json(result.recordset);
 });
 

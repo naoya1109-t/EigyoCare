@@ -29,9 +29,19 @@ export interface CustomerDetail {
   lastPaymentDate: string | null;
 }
 
-export function fetchCustomers(search: string): Promise<CustomerListItem[]> {
-  const query = search ? `?search=${encodeURIComponent(search)}` : "";
-  return apiFetch<CustomerListItem[]>(`/customers${query}`);
+export interface CustomerFilters {
+  search: string;
+  prefectureCode: string;
+  repCode: string;
+}
+
+export function fetchCustomers(filters: CustomerFilters): Promise<CustomerListItem[]> {
+  const params = new URLSearchParams();
+  if (filters.search) params.set("search", filters.search);
+  if (filters.prefectureCode) params.set("prefectureCode", filters.prefectureCode);
+  if (filters.repCode) params.set("repCode", filters.repCode);
+  const query = params.toString();
+  return apiFetch<CustomerListItem[]>(`/customers${query ? `?${query}` : ""}`);
 }
 
 export function fetchCustomerDetail(code: string): Promise<CustomerDetail> {
