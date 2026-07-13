@@ -14,7 +14,7 @@ import { ApiError } from "../../api/client";
 function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex border-b border-slate-100 py-1 text-sm">
-      <div className="w-32 shrink-0 text-slate-500">{label}</div>
+      <div className="w-32 shrink-0 border-b-2 border-blue-200 text-slate-500">{label}</div>
       <div className="text-slate-800">{value ?? "-"}</div>
     </div>
   );
