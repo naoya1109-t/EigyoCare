@@ -32,7 +32,22 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-lg bg-white p-8 shadow"
       >
-        <h1 className="mb-6 text-xl font-bold text-slate-800">介援隊 営業支援　ログイン</h1>
+        <h1 className="mb-6 flex items-center gap-2 text-xl font-bold text-slate-800">
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            className="shrink-0 text-blue-600"
+            aria-hidden="true"
+          >
+            <rect x="5" y="11" width="14" height="10" rx="2" strokeWidth="2" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          {/* eslint-disable-next-line no-irregular-whitespace */}
+          介援隊 営業支援　ログイン
+        </h1>
 
         {error && (
           <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
