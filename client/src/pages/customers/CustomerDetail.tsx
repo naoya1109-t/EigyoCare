@@ -26,8 +26,8 @@ function formatYearMonth(yearMonth: string): string {
 
 const receivableColumns: Column<CustomerReceivableRow>[] = [
   { key: "yearMonth", header: "年月", render: (r) => formatYearMonth(r.yearMonth) },
-  { key: "salesAmount", header: "売上額", align: "right", render: (r) => r.salesAmount.toLocaleString() },
   { key: "paymentAmount", header: "入金額", align: "right", render: (r) => r.paymentAmount.toLocaleString() },
+  { key: "salesAmount", header: "売上額", align: "right", render: (r) => r.salesAmount.toLocaleString() },
   { key: "balance", header: "売掛残", align: "right", render: (r) => r.balance.toLocaleString() },
 ];
 
