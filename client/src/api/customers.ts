@@ -47,3 +47,13 @@ export function fetchCustomers(filters: CustomerFilters): Promise<CustomerListIt
 export function fetchCustomerDetail(code: string): Promise<CustomerDetail> {
   return apiFetch<CustomerDetail>(`/customers/${code}`);
 }
+
+export interface CustomerReceivableRow {
+  yearMonth: string;
+  salesAmount: number;
+  paymentAmount: number;
+}
+
+export function fetchCustomerReceivables(code: string): Promise<CustomerReceivableRow[]> {
+  return apiFetch<CustomerReceivableRow[]>(`/customers/${code}/receivables`);
+}

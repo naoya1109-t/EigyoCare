@@ -82,3 +82,27 @@ customersRouter.get("/customers/:code", async (req, res) => {
   }
   res.json(row);
 });
+
+// 直近12ヶ月の売掛推移。ET0130売掛を直接クエリせず app.ReceivablesByCustomer ビュー経由で取得する
+// （経緯は functional-design.md 参照）
+customersRouter.get("/customers/:code/receivables", async (req, res) => {
+  const code = Number(req.params.code);
+  if (!Number.isInteger(code)) {
+    res.status(400).json({ message: "得意先コードが不正です" });
+    return;
+  }
+  const pool = await getReadonlyPool();
+  const result = await pool
+    .request()
+    .input("code", sql.Int, code)
+    .query(`
+      SELECT TOP 12
+        年月 AS yearMonth,
+        売上額 AS salesAmount,
+        入金額 AS paymentAmount
+      FROM app.ReceivablesByCustomer
+      WHERE 得意先CD = @code
+      ORDER BY 年月 DESC
+    `);
+  res.json(result.recordset.reverse());
+});
