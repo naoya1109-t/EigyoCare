@@ -15,7 +15,7 @@ function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex py-1 text-sm">
       <div className="w-24 shrink-0 border-b-2 border-blue-200 text-slate-500">{label}</div>
-      <div className="flex-1 border-b-2 border-slate-100 pl-3 text-slate-800">{value ?? "-"}</div>
+      <div className="flex-1 border-b-2 border-slate-300 pl-3 text-slate-800">{value ?? "-"}</div>
     </div>
   );
 }
