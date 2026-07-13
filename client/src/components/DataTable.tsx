@@ -42,8 +42,8 @@ export default function DataTable<T>({
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
-          {rows.map((row) => (
-            <tr key={rowKey(row)} className="hover:bg-slate-50">
+          {rows.map((row, i) => (
+            <tr key={rowKey(row)} className={`${i % 2 === 1 ? "bg-slate-50" : "bg-white"} hover:bg-slate-100`}>
               {columns.map((col) => (
                 <td
                   key={col.key}
