@@ -13,7 +13,7 @@ import { ApiError } from "../../api/client";
 
 function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="flex border-b border-slate-100 py-2 text-sm">
+    <div className="flex border-b border-slate-100 py-1 text-sm">
       <div className="w-32 shrink-0 text-slate-500">{label}</div>
       <div className="text-slate-800">{value ?? "-"}</div>
     </div>
@@ -111,7 +111,7 @@ export default function CustomerDetail() {
       {!error && !data && <p className="text-sm text-slate-500">読み込み中...</p>}
       {data && (
         <div className="flex flex-wrap items-start gap-4">
-          <div className="w-full max-w-[480px] rounded border border-slate-200 bg-white px-4 py-6">
+          <div className="w-full max-w-[480px] rounded border border-slate-200 bg-white px-4 py-3">
             <Row label="得意先名" value={data.customerName} />
             <Row label="フリガナ" value={data.customerNameKana} />
             <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
