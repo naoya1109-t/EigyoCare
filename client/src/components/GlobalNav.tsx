@@ -7,7 +7,7 @@ interface GlobalNavProps {
   onLogout: () => void;
 }
 
-function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
+function NavLinks({ onNavigate, dark = false }: { onNavigate?: () => void; dark?: boolean }) {
   return (
     <nav className="flex flex-col gap-1">
       {MENU_ITEMS.map((item) => (
@@ -17,7 +17,13 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
           onClick={onNavigate}
           className={({ isActive }) =>
             `rounded px-3 py-2 text-sm ${
-              isActive ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-slate-100"
+              dark
+                ? isActive
+                  ? "bg-white text-[#225596]"
+                  : "text-blue-100 hover:bg-white/10"
+                : isActive
+                  ? "bg-blue-600 text-white"
+                  : "text-slate-700 hover:bg-slate-100"
             }`
           }
         >
@@ -34,12 +40,12 @@ export default function GlobalNav({ userName, onLogout }: GlobalNavProps) {
   return (
     <>
       {/* PC: サイドメニュー */}
-      <aside className="hidden w-60 shrink-0 border-r border-slate-200 bg-white p-4 md:block">
-        <div className="mb-6 text-lg font-bold text-slate-800">営業支援</div>
-        <NavLinks />
-        <div className="mt-6 border-t border-slate-200 pt-4 text-sm text-slate-600">
+      <aside className="hidden w-60 shrink-0 bg-[#225596] p-4 md:block">
+        <div className="mb-6 text-lg font-bold text-white">営業支援</div>
+        <NavLinks dark />
+        <div className="mt-6 border-t border-white/20 pt-4 text-sm text-blue-100">
           <p className="mb-2">{userName}</p>
-          <button onClick={onLogout} className="text-blue-600 hover:underline">
+          <button onClick={onLogout} className="text-white hover:underline">
             ログアウト
           </button>
         </div>
