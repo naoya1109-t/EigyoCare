@@ -23,8 +23,7 @@ function Home() {
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
       <div className="rounded-lg bg-white p-8 shadow">
-        <h1 className="text-2xl font-bold text-slate-800">EigyoCare</h1>
-        <p className="mt-2 text-slate-500">メニューから各機能を選択してください</p>
+        <p className="text-slate-500">メニューから各機能を選択してください</p>
       </div>
     </AppLayout>
   );
