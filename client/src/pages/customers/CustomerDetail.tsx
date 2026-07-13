@@ -124,11 +124,11 @@ export default function CustomerDetail() {
             <Row label="価格表" value={`FAX:${data.priceListFax ?? "-"} / WEB:${data.priceListWeb ?? "-"}`} />
             <Row
               label="無料卸価格"
-              value={data.freeShippingPrice !== null ? data.freeShippingPrice.toLocaleString() : null}
+              value={data.freeShippingPrice !== null ? `${data.freeShippingPrice.toLocaleString()}円` : null}
             />
             <Row
               label="倉庫送料"
-              value={data.warehouseShippingFee !== null ? data.warehouseShippingFee.toLocaleString() : null}
+              value={data.warehouseShippingFee !== null ? `${data.warehouseShippingFee.toLocaleString()}円` : null}
             />
             <Row label="営業担当" value={data.repName} />
             <Row
