@@ -10,24 +10,27 @@ import { ApiError } from "../api/client";
 
 export default function BudgetProgress() {
   const [reps, setReps] = useState<Rep[]>([]);
+  const [repsLoaded, setRepsLoaded] = useState(false);
   const [repCode, setRepCode] = useState("");
   const [data, setData] = useState<BudgetProgressType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchReps().then((r) => {
-      setReps(r);
-      if (r.length > 0) setRepCode(String(r[0].repCode));
-    }).catch(() => undefined);
+    fetchReps()
+      .then((r) => {
+        setReps(r);
+        if (r.length > 0) setRepCode(String(r[0].repCode));
+      })
+      .finally(() => setRepsLoaded(true));
   }, []);
 
   useEffect(() => {
-    if (!repCode) return;
+    if (!repsLoaded) return;
     setError(null);
     fetchBudgetProgress(repCode)
       .then(setData)
       .catch((err) => setError(err instanceof ApiError ? err.message : "予算進捗の取得に失敗しました"));
-  }, [repCode]);
+  }, [repCode, repsLoaded]);
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
@@ -37,7 +40,10 @@ export default function BudgetProgress() {
           label="担当者"
           value={repCode}
           onChange={setRepCode}
-          options={reps.map((r) => ({ value: String(r.repCode), label: r.repName }))}
+          options={[
+            { value: "", label: "全社計" },
+            ...reps.map((r) => ({ value: String(r.repCode), label: r.repName })),
+          ]}
         />
       </FilterForm>
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}

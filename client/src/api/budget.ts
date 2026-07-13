@@ -8,7 +8,7 @@ export interface BudgetMonthly {
 
 export interface BudgetProgress {
   period: number;
-  repCode: number;
+  repCode: number | null;
   monthly: BudgetMonthly[];
   totalBudget: number;
   totalActual: number;
@@ -16,5 +16,6 @@ export interface BudgetProgress {
 }
 
 export function fetchBudgetProgress(repCode: string): Promise<BudgetProgress> {
-  return apiFetch<BudgetProgress>(`/budget/progress?repCode=${encodeURIComponent(repCode)}`);
+  const query = repCode ? `?repCode=${encodeURIComponent(repCode)}` : "";
+  return apiFetch<BudgetProgress>(`/budget/progress${query}`);
 }
