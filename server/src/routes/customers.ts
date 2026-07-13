@@ -9,7 +9,7 @@ customersRouter.use(requireAuth);
 
 const LIST_COLUMNS = `
   c.得意先CD AS customerCode,
-  c.得意先名 AS customerName,
+  LTRIM(RTRIM(c.得意先名)) AS customerName,
   c.得意先名カナ AS customerNameKana,
   p.県名 AS prefecture,
   c.TEL AS tel,
@@ -18,7 +18,7 @@ const LIST_COLUMNS = `
 
 const DETAIL_COLUMNS = `
   c.得意先CD AS customerCode,
-  c.得意先名 AS customerName,
+  LTRIM(RTRIM(c.得意先名)) AS customerName,
   c.得意先名カナ AS customerNameKana,
   c.郵便番号 AS zipCode,
   p.県名 AS prefecture,
