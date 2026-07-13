@@ -111,7 +111,7 @@ export default function CustomerDetail() {
       {!error && !data && <p className="text-sm text-slate-500">読み込み中...</p>}
       {data && (
         <div className="flex flex-wrap items-start gap-4">
-          <div className="w-full max-w-[480px] rounded border border-slate-200 bg-white px-4 py-3">
+          <div className="w-full max-w-[480px] rounded border border-blue-200 bg-white px-4 py-3">
             <Row label="得意先名" value={data.customerName} />
             <Row label="フリガナ" value={data.customerNameKana} />
             <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
