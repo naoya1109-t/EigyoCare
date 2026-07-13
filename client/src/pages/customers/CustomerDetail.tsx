@@ -82,6 +82,13 @@ export default function CustomerDetail() {
               columns={receivableColumns}
               rows={receivables}
               rowKey={(r) => r.yearMonth}
+              theme={{
+                border: "border-[#1C6836]",
+                header: "bg-[#1C6836] text-white",
+                oddRow: "bg-[#BEDFC0]",
+                evenRow: "bg-white",
+                rowHover: "hover:bg-[#a9d3ac]",
+              }}
             />
           </div>
         </div>
