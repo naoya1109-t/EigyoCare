@@ -32,6 +32,8 @@ const DETAIL_COLUMNS = `
   c.担当者名 AS contactName,
   r.担当者名 AS repName,
   c.締日 AS closingDay,
+  c.回収サイクル AS collectionCycle,
+  c.回収日 AS collectionDay,
   c.最終購買日 AS lastPurchaseDate,
   c.最終入金日 AS lastPaymentDate
 `;

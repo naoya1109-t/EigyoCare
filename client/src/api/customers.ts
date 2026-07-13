@@ -25,6 +25,8 @@ export interface CustomerDetail {
   contactName: string | null;
   repName: string | null;
   closingDay: number | null;
+  collectionCycle: number | null;
+  collectionDay: number | null;
   lastPurchaseDate: string | null;
   lastPaymentDate: string | null;
 }

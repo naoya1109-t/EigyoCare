@@ -47,9 +47,26 @@ function formatZipCode(zipCode: string | null): string | null {
   return /^\d{7}$/.test(zipCode) ? `${zipCode.slice(0, 3)}-${zipCode.slice(3)}` : zipCode;
 }
 
-function formatClosingDay(closingDay: number | null): string | null {
+const COLLECTION_CYCLE_LABELS: Record<number, string> = {
+  0: "当月",
+  1: "翌月",
+  2: "翌々月",
+  3: "3ケ月",
+  4: "4ケ月",
+  5: "5ケ月",
+  6: "6ケ月",
+};
+
+function formatClosingAndCollection(
+  closingDay: number | null,
+  collectionCycle: number | null,
+  collectionDay: number | null,
+): string | null {
   if (closingDay === null) return null;
-  return closingDay === 31 ? "末日締め" : `${closingDay}日締め`;
+  const closingText = closingDay === 31 ? "末日締" : `${closingDay}日締`;
+  const cycleText = collectionCycle !== null ? COLLECTION_CYCLE_LABELS[collectionCycle] ?? String(collectionCycle) : "";
+  const dayText = collectionDay !== null ? `${collectionDay}日` : "";
+  return [closingText, cycleText, dayText].filter(Boolean).join(" ");
 }
 
 const receivableColumns: Column<CustomerReceivableRow>[] = [
@@ -107,7 +124,10 @@ export default function CustomerDetail() {
             <Row label="担当者役職" value={data.contactTitle} />
             <Row label="先方担当者名" value={data.contactName} />
             <Row label="営業担当" value={data.repName} />
-            <Row label="締日" value={formatClosingDay(data.closingDay)} />
+            <Row
+              label="締日"
+              value={formatClosingAndCollection(data.closingDay, data.collectionCycle, data.collectionDay)}
+            />
             <Row label="最終購買日" value={data.lastPurchaseDate?.slice(0, 10) ?? null} />
             <Row label="最終入金日" value={data.lastPaymentDate?.slice(0, 10) ?? null} />
           </div>
