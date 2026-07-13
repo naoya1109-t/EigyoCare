@@ -29,6 +29,8 @@ const DETAIL_COLUMNS = `
   c.EMail AS email,
   c.価格表FAX AS priceListFax,
   c.価格表WEB AS priceListWeb,
+  c.送料無料価格 AS freeShippingPrice,
+  c.倉庫出荷送料 AS warehouseShippingFee,
   r.担当者名 AS repName,
   c.締日 AS closingDay,
   c.回収サイクル AS collectionCycle,
