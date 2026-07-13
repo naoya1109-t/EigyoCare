@@ -52,6 +52,7 @@ export interface CustomerReceivableRow {
   yearMonth: string;
   salesAmount: number;
   paymentAmount: number;
+  balance: number;
 }
 
 export function fetchCustomerReceivables(code: string): Promise<CustomerReceivableRow[]> {

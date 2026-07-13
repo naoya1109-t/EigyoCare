@@ -86,7 +86,9 @@ customersRouter.get("/customers/:code", async (req, res) => {
 
 // 直近12ヶ月（暦月固定）の売掛推移。ET0130売掛は取引が発生した月にしかレコードができないため、
 // 取引のない月は0円として埋める。ET0130売掛を直接クエリせず app.ReceivablesByCustomer ビュー経由で
-// 取得する（経緯は functional-design.md 参照）
+// 取得する（経緯は functional-design.md 参照）。
+// 売掛残は、ビューの「今回売掛残高」列（実体は「その月単独の売上額-入金額」であり累積残高ではない）を
+// 得意先の最初のレコードから対象月まで累積加算して算出する
 customersRouter.get("/customers/:code/receivables", async (req, res) => {
   const code = Number(req.params.code);
   if (!Number.isInteger(code)) {
@@ -96,36 +98,39 @@ customersRouter.get("/customers/:code/receivables", async (req, res) => {
   const pool = await getReadonlyPool();
 
   const now = new Date();
-  const months = Array.from({ length: 12 }, (_, i) => toYearMonth(addMonths(now, i - 11)));
-  const startMonth = months[0].replace("-", "");
-  const endMonth = months[months.length - 1].replace("-", "");
+  const months = Array.from({ length: 12 }, (_, i) => toYearMonth(addMonths(now, i - 11)).replace("-", ""));
 
-  const result = await pool
+  const historyResult = await pool
     .request()
     .input("code", sql.Int, code)
-    .input("start", sql.Char, startMonth)
-    .input("end", sql.Char, endMonth)
     .query(`
-      SELECT 年月 AS yearMonth, 売上額 AS salesAmount, 入金額 AS paymentAmount
+      SELECT 年月 AS yearMonth, 売上額 AS salesAmount, 入金額 AS paymentAmount, 今回売掛残高 AS monthlyDelta
       FROM app.ReceivablesByCustomer
-      WHERE 得意先CD = @code AND 年月 >= @start AND 年月 <= @end
+      WHERE 得意先CD = @code
+      ORDER BY 年月 ASC
     `);
-  const byMonth = new Map(
-    result.recordset.map((r: { yearMonth: string; salesAmount: number; paymentAmount: number }) => [
-      r.yearMonth,
-      r,
-    ]),
-  );
+  const history: { yearMonth: string; salesAmount: number; paymentAmount: number; monthlyDelta: number }[] =
+    historyResult.recordset;
+  const byMonth = new Map(history.map((r) => [r.yearMonth, r]));
 
-  const rows = months.map((month) => {
-    const dbMonth = month.replace("-", "");
-    const existing = byMonth.get(dbMonth);
-    return {
-      yearMonth: dbMonth,
+  // history と months はどちらも年月昇順のため、先頭から累積しつつ突き合わせる。
+  // 表示ウィンドウより前の取引も含めて合算しないと、対象月時点の正しい売掛残にならない
+  let runningBalance = 0;
+  let historyIndex = 0;
+  const rows: { yearMonth: string; salesAmount: number; paymentAmount: number; balance: number }[] = [];
+  for (const month of months) {
+    while (historyIndex < history.length && history[historyIndex].yearMonth <= month) {
+      runningBalance += history[historyIndex].monthlyDelta;
+      historyIndex++;
+    }
+    const existing = byMonth.get(month);
+    rows.push({
+      yearMonth: month,
       salesAmount: existing?.salesAmount ?? 0,
       paymentAmount: existing?.paymentAmount ?? 0,
-    };
-  });
+      balance: runningBalance,
+    });
+  }
 
   res.json(rows);
 });
