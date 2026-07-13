@@ -84,11 +84,11 @@ export default function BudgetProgress() {
             </div>
             <div className="mt-4 space-y-1 text-sm">
               <div className="flex justify-between border-b border-slate-100 py-1">
-                <span className="text-slate-500">予算計</span>
+                <span className="text-slate-500">予算計（経過月分）</span>
                 <span className="font-semibold text-slate-800">{data.totalBudget.toLocaleString()}</span>
               </div>
               <div className="flex justify-between py-1">
-                <span className="text-slate-500">実績計</span>
+                <span className="text-slate-500">実績計（経過月分）</span>
                 <span className="font-semibold text-slate-800">{data.totalActual.toLocaleString()}</span>
               </div>
             </div>
