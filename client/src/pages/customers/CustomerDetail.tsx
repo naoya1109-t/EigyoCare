@@ -66,7 +66,8 @@ function formatClosingAndCollection(
   const closingText = closingDay === 31 ? "末日締" : `${closingDay}日締`;
   const cycleText = collectionCycle !== null ? COLLECTION_CYCLE_LABELS[collectionCycle] ?? String(collectionCycle) : "";
   const dayText = collectionDay !== null ? `${collectionDay}日` : "";
-  return [closingText, cycleText, dayText].filter(Boolean).join(" ");
+  const collectionText = [cycleText, dayText].filter(Boolean).join(" ");
+  return [closingText, collectionText].filter(Boolean).join(" / ");
 }
 
 const receivableColumns: Column<CustomerReceivableRow>[] = [
@@ -125,7 +126,7 @@ export default function CustomerDetail() {
             <Row label="先方担当者名" value={data.contactName} />
             <Row label="営業担当" value={data.repName} />
             <Row
-              label="締日"
+              label="締日/回収"
               value={formatClosingAndCollection(data.closingDay, data.collectionCycle, data.collectionDay)}
             />
             <Row label="最終購買日" value={data.lastPurchaseDate?.slice(0, 10) ?? null} />
