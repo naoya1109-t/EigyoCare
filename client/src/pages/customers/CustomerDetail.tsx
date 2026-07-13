@@ -99,13 +99,19 @@ export default function CustomerDetail() {
       <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate(-1)}>
         ← 顧客情報一覧へ戻る
       </button>
-      <h1 className="mb-4 text-xl font-bold text-slate-800">顧客詳細</h1>
+      <div className="mb-4 flex items-center gap-2">
+        <h1 className="text-xl font-bold text-slate-800">顧客詳細</h1>
+        {data && (
+          <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
+            得意先CD: {data.customerCode}
+          </span>
+        )}
+      </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
       {!error && !data && <p className="text-sm text-slate-500">読み込み中...</p>}
       {data && (
         <div className="flex flex-wrap items-start gap-4">
           <div className="w-full max-w-[480px] rounded border border-slate-200 bg-white p-6">
-            <Row label="得意先CD" value={data.customerCode} />
             <Row label="得意先名" value={data.customerName} />
             <Row label="フリガナ" value={data.customerNameKana} />
             <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
