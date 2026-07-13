@@ -58,7 +58,27 @@ export default function BudgetProgress() {
                   <span className="mt-2">集計対象月なし</span>
                 </div>
               ) : (
-                <ProgressGauge value={data.priorMonthsAchievementRate} label="予算達成率（前月まで）" size={140} />
+                <ProgressGauge
+                  value={data.priorMonthsAchievementRate}
+                  label="予算達成率（前月まで）"
+                  size={140}
+                  hoverDetails={
+                    <div className="space-y-0.5">
+                      <div className="flex justify-between gap-4">
+                        <span className="text-slate-500">予算計</span>
+                        <span className="font-semibold text-slate-800">
+                          {data.totalBudgetPrior.toLocaleString()}
+                        </span>
+                      </div>
+                      <div className="flex justify-between gap-4">
+                        <span className="text-slate-500">実績計</span>
+                        <span className="font-semibold text-slate-800">
+                          {data.totalActualPrior.toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  }
+                />
               )}
               <ProgressGauge value={data.achievementRate} label="予算達成率（経過月分）" size={140} />
             </div>

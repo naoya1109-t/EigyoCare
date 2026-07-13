@@ -9,9 +9,9 @@ describe("ProgressGauge", () => {
     expect(screen.getByText("達成率")).toBeInTheDocument();
   });
 
-  it("clamps values above 100 to 100%", () => {
-    render(<ProgressGauge value={150} />);
-    expect(screen.getByText("100%")).toBeInTheDocument();
+  it("shows the real value above 100% (achievement can exceed budget)", () => {
+    render(<ProgressGauge value={103} />);
+    expect(screen.getByText("103%")).toBeInTheDocument();
   });
 
   it("clamps negative values to 0%", () => {

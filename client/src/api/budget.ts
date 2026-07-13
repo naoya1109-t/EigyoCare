@@ -14,6 +14,8 @@ export interface BudgetProgress {
   totalActual: number;
   achievementRate: number;
   priorMonthsAchievementRate: number | null;
+  totalBudgetPrior: number;
+  totalActualPrior: number;
 }
 
 export function fetchBudgetProgress(repCode: string): Promise<BudgetProgress> {

@@ -24,6 +24,8 @@ export interface BudgetProgressResult {
   achievementRate: number;
   /** 前月末までの達成率。当該期に前月が存在しない場合（10月＝期首に閲覧した場合等）は null */
   priorMonthsAchievementRate: number | null;
+  totalBudgetPrior: number;
+  totalActualPrior: number;
 }
 
 /**
@@ -64,5 +66,13 @@ export function computeBudgetProgress(
   const priorMonthsAchievementRate =
     priorMonths.length === 0 ? null : totalBudgetPrior > 0 ? (totalActualPrior / totalBudgetPrior) * 100 : 0;
 
-  return { monthly, totalBudget, totalActual, achievementRate, priorMonthsAchievementRate };
+  return {
+    monthly,
+    totalBudget,
+    totalActual,
+    achievementRate,
+    priorMonthsAchievementRate,
+    totalBudgetPrior,
+    totalActualPrior,
+  };
 }
