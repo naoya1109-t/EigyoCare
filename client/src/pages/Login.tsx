@@ -27,7 +27,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+    <div className="flex min-h-screen items-start justify-center bg-slate-50 px-4 pt-20">
       <form
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-lg bg-white p-8 shadow"
@@ -80,7 +80,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded bg-blue-600 py-2 font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+          className="w-full rounded bg-blue-900 py-2 font-semibold text-white hover:bg-blue-950 disabled:opacity-50"
         >
           {submitting ? "ログイン中..." : "ログイン"}
         </button>
