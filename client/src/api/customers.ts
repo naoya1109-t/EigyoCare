@@ -20,9 +20,8 @@ export interface CustomerDetail {
   tel: string | null;
   fax: string | null;
   email: string | null;
-  contactDept: string | null;
-  contactTitle: string | null;
-  contactName: string | null;
+  priceListFax: string | null;
+  priceListWeb: string | null;
   repName: string | null;
   closingDay: number | null;
   collectionCycle: number | null;

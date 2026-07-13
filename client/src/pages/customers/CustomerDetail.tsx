@@ -121,9 +121,7 @@ export default function CustomerDetail() {
               }
             />
             <Row label="EMail" value={<MailLink email={data.email} />} />
-            <Row label="担当者部署" value={data.contactDept} />
-            <Row label="担当者役職" value={data.contactTitle} />
-            <Row label="先方担当者名" value={data.contactName} />
+            <Row label="価格表" value={`FAX:${data.priceListFax ?? "-"} / WEB:${data.priceListWeb ?? "-"}`} />
             <Row label="営業担当" value={data.repName} />
             <Row
               label="締日 / 回収"
