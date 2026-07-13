@@ -71,8 +71,7 @@ export default function CustomerDetail() {
             <Row label="都道府県" value={data.prefecture} />
             <Row label="住所1" value={data.address1} />
             <Row label="住所2" value={data.address2} />
-            <Row label="TEL" value={data.tel} />
-            <Row label="FAX" value={data.fax} />
+            <Row label="TEL / FAX" value={`${data.tel ?? "-"} / ${data.fax ?? "-"}`} />
             <Row label="EMail" value={data.email} />
             <Row label="担当者部署" value={data.contactDept} />
             <Row label="担当者役職" value={data.contactTitle} />
