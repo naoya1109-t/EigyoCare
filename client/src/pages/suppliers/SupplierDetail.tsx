@@ -1,16 +1,25 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../../components/AppLayout";
 import { fetchSupplierDetail, SupplierDetail as SupplierDetailType } from "../../api/suppliers";
 import { getCurrentUser } from "../../api/session";
 import { ApiError } from "../../api/client";
 
-function Row({ label, value }: { label: string; value: string | number | null }) {
+function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex border-b border-slate-100 py-2 text-sm">
       <div className="w-32 shrink-0 text-slate-500">{label}</div>
       <div className="whitespace-pre-wrap text-slate-800">{value ?? "-"}</div>
     </div>
+  );
+}
+
+function TelLink({ tel }: { tel: string | null }) {
+  if (!tel) return <>-</>;
+  return (
+    <a href={`tel:${tel}`} className="text-blue-600 hover:underline">
+      {tel}
+    </a>
   );
 }
 
@@ -44,13 +53,20 @@ export default function SupplierDetail() {
           <Row label="都道府県" value={data.prefecture} />
           <Row label="住所1" value={data.address1} />
           <Row label="住所2" value={data.address2} />
-          <Row label="TEL / FAX" value={`${data.tel ?? "-"} / ${data.fax ?? "-"}`} />
+          <Row
+            label="TEL / FAX"
+            value={
+              <>
+                <TelLink tel={data.tel} /> / {data.fax ?? "-"}
+              </>
+            }
+          />
           <Row label="HP" value={data.homepage} />
           <Row label="代表者氏名" value={data.representativeName} />
           <Row label="担当者部署" value={data.contactDept} />
           <Row label="担当者役職" value={data.contactTitle} />
           <Row label="担当者名" value={data.contactName} />
-          <Row label="担当者TEL" value={data.contactTel} />
+          <Row label="担当者TEL" value={<TelLink tel={data.contactTel} />} />
           <Row label="EMail" value={data.email} />
           <Row label="備考" value={data.remarks} />
         </div>
