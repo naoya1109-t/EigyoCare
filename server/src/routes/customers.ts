@@ -51,7 +51,8 @@ customersRouter.get("/customers", async (req, res) => {
     FROM ET0020得意先 c
     LEFT JOIN ET0001県 p ON c.県CD = p.県CD
     LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
-    WHERE (c.得意先名 LIKE @search OR c.得意先名カナ LIKE @search)
+    WHERE c.検索対象外 = 2
+      AND (c.得意先名 LIKE @search OR c.得意先名カナ LIKE @search)
       ${prefectureCode !== undefined ? "AND c.県CD = @prefectureCode" : ""}
       ${repCode !== undefined ? "AND c.営業担当CD = @repCode" : ""}
     ORDER BY c.得意先CD
