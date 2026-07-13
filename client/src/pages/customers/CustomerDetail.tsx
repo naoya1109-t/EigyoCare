@@ -55,7 +55,7 @@ export default function CustomerDetail() {
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
-      <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate("/customers")}>
+      <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate(-1)}>
         ← 顧客情報一覧へ戻る
       </button>
       <h1 className="mb-4 text-xl font-bold text-slate-800">顧客詳細</h1>
@@ -63,7 +63,7 @@ export default function CustomerDetail() {
       {!error && !data && <p className="text-sm text-slate-500">読み込み中...</p>}
       {data && (
         <div className="flex flex-wrap items-start gap-4">
-          <div className="w-full max-w-xl rounded border border-slate-200 bg-white p-6">
+          <div className="w-full max-w-[480px] rounded border border-slate-200 bg-white p-6">
             <Row label="得意先CD" value={data.customerCode} />
             <Row label="得意先名" value={data.customerName} />
             <Row label="フリガナ" value={data.customerNameKana} />

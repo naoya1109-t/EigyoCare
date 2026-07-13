@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AppLayout from "../../components/AppLayout";
 import DataTable, { Column } from "../../components/DataTable";
 import { FilterForm, TextField, SelectField } from "../../components/FilterForm";
@@ -17,9 +17,10 @@ const columns: Column<CustomerListItem>[] = [
 
 export default function CustomerList() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
-  const [prefectureCode, setPrefectureCode] = useState("");
-  const [repCode, setRepCode] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") ?? "");
+  const [prefectureCode, setPrefectureCode] = useState(searchParams.get("prefectureCode") ?? "");
+  const [repCode, setRepCode] = useState(searchParams.get("repCode") ?? "");
   const [prefectures, setPrefectures] = useState<Prefecture[]>([]);
   const [reps, setReps] = useState<Rep[]>([]);
   const [rows, setRows] = useState<CustomerListItem[]>([]);
@@ -34,12 +35,19 @@ export default function CustomerList() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(true);
+      const params: Record<string, string> = {};
+      if (search) params.search = search;
+      if (prefectureCode) params.prefectureCode = prefectureCode;
+      if (repCode) params.repCode = repCode;
+      setSearchParams(params, { replace: true });
+
       fetchCustomers({ search, prefectureCode, repCode })
         .then(setRows)
         .catch(() => setError("顧客情報の取得に失敗しました"))
         .finally(() => setLoading(false));
     }, 300);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, prefectureCode, repCode]);
 
   return (
