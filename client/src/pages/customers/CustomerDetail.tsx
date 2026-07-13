@@ -66,8 +66,7 @@ function formatClosingAndCollection(
   const closingText = closingDay === 31 ? "末日締" : `${closingDay}日締`;
   const cycleText = collectionCycle !== null ? COLLECTION_CYCLE_LABELS[collectionCycle] ?? String(collectionCycle) : "";
   const dayText = collectionDay === 31 ? "末日" : collectionDay !== null ? `${collectionDay}日` : "";
-  const collectionText =
-    dayText === "末日" ? `${cycleText}${dayText}` : [cycleText, dayText].filter(Boolean).join(" ");
+  const collectionText = `${cycleText}${dayText}`;
   return [closingText, collectionText].filter(Boolean).join(" / ");
 }
 
