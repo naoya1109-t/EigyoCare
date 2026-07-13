@@ -31,6 +31,7 @@ const DETAIL_COLUMNS = `
   c.価格表WEB AS priceListWeb,
   c.送料無料価格 AS freeShippingPrice,
   c.倉庫出荷送料 AS warehouseShippingFee,
+  c.返品手数料 AS returnFee,
   r.担当者名 AS repName,
   c.締日 AS closingDay,
   c.回収サイクル AS collectionCycle,

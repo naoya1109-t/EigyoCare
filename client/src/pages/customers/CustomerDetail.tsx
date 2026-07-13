@@ -130,6 +130,7 @@ export default function CustomerDetail() {
               label="倉庫送料"
               value={data.warehouseShippingFee !== null ? `${data.warehouseShippingFee.toLocaleString()}円` : null}
             />
+            <Row label="返品手数料" value={data.returnFee !== null ? `${data.returnFee.toLocaleString()}円` : null} />
             <Row label="営業担当" value={data.repName} />
             <Row
               label="締日 / 回収"

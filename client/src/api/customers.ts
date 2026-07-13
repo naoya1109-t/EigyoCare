@@ -24,6 +24,7 @@ export interface CustomerDetail {
   priceListWeb: string | null;
   freeShippingPrice: number | null;
   warehouseShippingFee: number | null;
+  returnFee: number | null;
   repName: string | null;
   closingDay: number | null;
   collectionCycle: number | null;
