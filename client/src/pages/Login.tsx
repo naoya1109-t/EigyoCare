@@ -32,7 +32,7 @@ export default function Login() {
         onSubmit={handleSubmit}
         className="w-full max-w-sm rounded-lg bg-white p-8 shadow"
       >
-        <h1 className="mb-6 text-xl font-bold text-slate-800">EigyoCare ログイン</h1>
+        <h1 className="mb-6 text-xl font-bold text-slate-800">介援隊 営業支援　ログイン</h1>
 
         {error && (
           <p className="mb-4 rounded bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
