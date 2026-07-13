@@ -3,7 +3,7 @@ import AppLayout from "../components/AppLayout";
 import TrendChart from "../components/TrendChart";
 import ProgressGauge from "../components/ProgressGauge";
 import { FilterForm, SelectField } from "../components/FilterForm";
-import { fetchBudgetProgress, BudgetProgress as BudgetProgressType } from "../api/budget";
+import { fetchBudgetProgress, BudgetProgress as BudgetProgressType, BudgetMonthly } from "../api/budget";
 import { fetchReps, Rep } from "../api/reference";
 import { getCurrentUser } from "../api/session";
 import { ApiError } from "../api/client";
@@ -55,6 +55,11 @@ export default function BudgetProgress() {
                 { key: "budgetAmount", label: "予算", color: "#94a3b8" },
                 { key: "actualAmount", label: "実績", color: "#2563eb" },
               ]}
+              renderTooltipExtra={(row: BudgetMonthly) => {
+                if (row.actualAmount === null || row.budgetAmount === 0) return null;
+                const rate = (row.actualAmount / row.budgetAmount) * 100;
+                return <div className="mt-1 font-semibold text-slate-700">達成率: {rate.toFixed(1)}%</div>;
+              }}
             />
           </div>
         </div>

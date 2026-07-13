@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   ResponsiveContainer,
   LineChart,
@@ -25,6 +26,8 @@ interface TrendChartProps<T> {
   height?: number;
   /** "horizontal": カテゴリを縦軸に並べる横棒グラフ。項目数が多いカテゴリ比較に向く */
   orientation?: "vertical" | "horizontal";
+  /** ツールチップに系列の値と併せて表示する追加情報（対象行のデータを受け取る） */
+  renderTooltipExtra?: (row: T) => ReactNode;
 }
 
 const DEFAULT_COLORS = ["#2563eb", "#16a34a", "#d97706", "#dc2626", "#7c3aed"];
@@ -36,6 +39,7 @@ export default function TrendChart<T extends object>({
   type = "line",
   height = 300,
   orientation = "vertical",
+  renderTooltipExtra,
 }: TrendChartProps<T>) {
   const Chart = type === "bar" ? BarChart : LineChart;
   const isHorizontalBars = type === "bar" && orientation === "horizontal";
@@ -58,7 +62,23 @@ export default function TrendChart<T extends object>({
           width={isHorizontalBars ? 100 : 60}
           interval={0}
         />
-        <Tooltip />
+        <Tooltip
+          content={({ active, payload, label }) => {
+            if (!active || !payload?.length) return null;
+            const row = payload[0].payload as T;
+            return (
+              <div className="rounded border border-slate-200 bg-white p-2 text-xs shadow">
+                <div className="mb-1 font-semibold text-slate-700">{label}</div>
+                {payload.map((p) => (
+                  <div key={String(p.dataKey)} style={{ color: p.color }}>
+                    {p.name}: {Number(p.value).toLocaleString()}
+                  </div>
+                ))}
+                {renderTooltipExtra?.(row)}
+              </div>
+            );
+          }}
+        />
         <Legend />
         {series.map((s, i) =>
           type === "bar" ? (
