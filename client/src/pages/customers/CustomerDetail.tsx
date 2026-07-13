@@ -24,6 +24,11 @@ function formatYearMonth(yearMonth: string): string {
   return yearMonth.length === 6 ? `${yearMonth.slice(0, 4)}-${yearMonth.slice(4)}` : yearMonth;
 }
 
+function formatZipCode(zipCode: string | null): string | null {
+  if (!zipCode) return zipCode;
+  return /^\d{7}$/.test(zipCode) ? `${zipCode.slice(0, 3)}-${zipCode.slice(3)}` : zipCode;
+}
+
 const receivableColumns: Column<CustomerReceivableRow>[] = [
   { key: "yearMonth", header: "年月", render: (r) => formatYearMonth(r.yearMonth) },
   { key: "paymentAmount", header: "入金額", align: "right", render: (r) => r.paymentAmount.toLocaleString() },
@@ -62,7 +67,7 @@ export default function CustomerDetail() {
             <Row label="得意先CD" value={data.customerCode} />
             <Row label="得意先名" value={data.customerName} />
             <Row label="フリガナ" value={data.customerNameKana} />
-            <Row label="郵便番号" value={data.zipCode} />
+            <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
             <Row label="都道府県" value={data.prefecture} />
             <Row label="住所1" value={data.address1} />
             <Row label="住所2" value={data.address2} />
