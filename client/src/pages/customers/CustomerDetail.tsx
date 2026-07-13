@@ -127,7 +127,7 @@ export default function CustomerDetail() {
             <Row label="先方担当者名" value={data.contactName} />
             <Row label="営業担当" value={data.repName} />
             <Row
-              label="締日/回収"
+              label="締日 / 回収"
               value={formatClosingAndCollection(data.closingDay, data.collectionCycle, data.collectionDay)}
             />
             <Row label="最終購買日" value={data.lastPurchaseDate?.slice(0, 10) ?? null} />
