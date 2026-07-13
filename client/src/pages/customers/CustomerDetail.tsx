@@ -47,6 +47,11 @@ function formatZipCode(zipCode: string | null): string | null {
   return /^\d{7}$/.test(zipCode) ? `${zipCode.slice(0, 3)}-${zipCode.slice(3)}` : zipCode;
 }
 
+function formatClosingDay(closingDay: number | null): string | null {
+  if (closingDay === null) return null;
+  return closingDay === 31 ? "末日締め" : `${closingDay}日締め`;
+}
+
 const receivableColumns: Column<CustomerReceivableRow>[] = [
   { key: "yearMonth", header: "年月", render: (r) => formatYearMonth(r.yearMonth) },
   { key: "paymentAmount", header: "入金額", align: "right", render: (r) => r.paymentAmount.toLocaleString() },
@@ -102,7 +107,7 @@ export default function CustomerDetail() {
             <Row label="担当者役職" value={data.contactTitle} />
             <Row label="先方担当者名" value={data.contactName} />
             <Row label="営業担当" value={data.repName} />
-            <Row label="締日" value={data.closingDay} />
+            <Row label="締日" value={formatClosingDay(data.closingDay)} />
             <Row label="最終購買日" value={data.lastPurchaseDate?.slice(0, 10) ?? null} />
             <Row label="最終入金日" value={data.lastPaymentDate?.slice(0, 10) ?? null} />
           </div>
