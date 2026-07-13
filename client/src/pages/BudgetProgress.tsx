@@ -17,10 +17,7 @@ export default function BudgetProgress() {
 
   useEffect(() => {
     fetchReps()
-      .then((r) => {
-        setReps(r);
-        if (r.length > 0) setRepCode(String(r[0].repCode));
-      })
+      .then(setReps)
       .finally(() => setRepsLoaded(true));
   }, []);
 
