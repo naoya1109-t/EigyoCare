@@ -23,6 +23,15 @@ function TelLink({ tel }: { tel: string | null }) {
   );
 }
 
+function MailLink({ email }: { email: string | null }) {
+  if (!email) return <>-</>;
+  return (
+    <a href={`mailto:${email}`} className="text-blue-600 hover:underline">
+      {email}
+    </a>
+  );
+}
+
 export default function SupplierDetail() {
   const { code } = useParams<{ code: string }>();
   const navigate = useNavigate();
@@ -67,7 +76,7 @@ export default function SupplierDetail() {
           <Row label="担当者役職" value={data.contactTitle} />
           <Row label="担当者名" value={data.contactName} />
           <Row label="担当者TEL" value={<TelLink tel={data.contactTel} />} />
-          <Row label="EMail" value={data.email} />
+          <Row label="EMail" value={<MailLink email={data.email} />} />
           <Row label="備考" value={data.remarks} />
         </div>
       )}

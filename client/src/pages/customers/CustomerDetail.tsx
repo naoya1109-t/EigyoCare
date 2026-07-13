@@ -29,6 +29,15 @@ function TelLink({ tel }: { tel: string | null }) {
   );
 }
 
+function MailLink({ email }: { email: string | null }) {
+  if (!email) return <>-</>;
+  return (
+    <a href={`mailto:${email}`} className="text-blue-600 hover:underline">
+      {email}
+    </a>
+  );
+}
+
 function formatYearMonth(yearMonth: string): string {
   return yearMonth.length === 6 ? `${yearMonth.slice(0, 4)}-${yearMonth.slice(4)}` : yearMonth;
 }
@@ -88,7 +97,7 @@ export default function CustomerDetail() {
                 </>
               }
             />
-            <Row label="EMail" value={data.email} />
+            <Row label="EMail" value={<MailLink email={data.email} />} />
             <Row label="担当者部署" value={data.contactDept} />
             <Row label="担当者役職" value={data.contactTitle} />
             <Row label="先方担当者名" value={data.contactName} />
