@@ -50,7 +50,18 @@ export default function BudgetProgress() {
       {data && (
         <div className="grid gap-4 md:grid-cols-3">
           <div className="rounded border border-slate-200 bg-white p-4">
-            <ProgressGauge value={data.achievementRate} label="予算達成率（経過月分）" />
+            <div className="flex flex-wrap justify-center gap-2">
+              {data.priorMonthsAchievementRate === null ? (
+                <div className="flex w-[140px] flex-col items-center justify-center text-center text-sm text-slate-400">
+                  <span>予算達成率</span>
+                  <span>（前月まで）</span>
+                  <span className="mt-2">集計対象月なし</span>
+                </div>
+              ) : (
+                <ProgressGauge value={data.priorMonthsAchievementRate} label="予算達成率（前月まで）" size={140} />
+              )}
+              <ProgressGauge value={data.achievementRate} label="予算達成率（経過月分）" size={140} />
+            </div>
             <div className="mt-4 space-y-1 text-sm">
               <div className="flex justify-between border-b border-slate-100 py-1">
                 <span className="text-slate-500">予算計</span>

@@ -54,4 +54,32 @@ describe("computeBudgetProgress", () => {
     expect(result.totalBudget).toBe(0);
     expect(result.achievementRate).toBe(0);
   });
+
+  describe("priorMonthsAchievementRate", () => {
+    it("is null when viewed in the fiscal year's first month (no prior month exists)", () => {
+      const now = new Date(Date.UTC(2025, 9, 15)); // 2025-10-15: fiscal year just started
+      const result = computeBudgetProgress(periodStart, budgetRow(100), new Map(), now);
+      expect(result.priorMonthsAchievementRate).toBeNull();
+    });
+
+    it("excludes the current (possibly incomplete) month from the rate", () => {
+      const actualByMonth = new Map<string, number>([
+        ["2025-10", 100], // full prior month, on target
+        ["2025-11", 5], // current month, partial so far
+      ]);
+      const now = new Date(Date.UTC(2025, 10, 3)); // 2025-11-03
+      const result = computeBudgetProgress(periodStart, budgetRow(100), actualByMonth, now);
+
+      // achievementRate (including current month) would be dragged down by the partial November data
+      expect(result.achievementRate).toBeCloseTo(52.5); // (100+5)/200*100
+      // priorMonthsAchievementRate only looks at October, which hit its budget exactly
+      expect(result.priorMonthsAchievementRate).toBeCloseTo(100);
+    });
+
+    it("is 0, not null, when a prior month exists but had no sales", () => {
+      const now = new Date(Date.UTC(2025, 10, 15)); // 2025-11-15
+      const result = computeBudgetProgress(periodStart, budgetRow(100), new Map(), now);
+      expect(result.priorMonthsAchievementRate).toBe(0);
+    });
+  });
 });
