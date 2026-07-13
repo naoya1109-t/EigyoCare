@@ -22,6 +22,7 @@ export interface CustomerDetail {
   email: string | null;
   priceListFax: string | null;
   priceListWeb: string | null;
+  shippingRule: string | null;
   freeShippingPrice: number | null;
   warehouseShippingFee: number | null;
   returnFee: number | null;

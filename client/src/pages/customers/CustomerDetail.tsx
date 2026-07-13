@@ -128,6 +128,7 @@ export default function CustomerDetail() {
             />
             <Row label="EMail" value={<MailLink email={data.email} />} />
             <Row label="価格表" value={`FAX:${data.priceListFax ?? "-"} / WEB:${data.priceListWeb ?? "-"}`} />
+            <Row label="送料規定" value={data.shippingRule} />
             <Row
               label="無料卸価格"
               value={data.freeShippingPrice !== null ? `${data.freeShippingPrice.toLocaleString()}円` : null}
