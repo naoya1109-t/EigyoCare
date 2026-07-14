@@ -44,7 +44,8 @@ suppliersRouter.get("/suppliers", async (req, res) => {
       SELECT TOP 200 ${LIST_COLUMNS}
       FROM [10.194.5.55].Medical.dbo.T430仕入先 s
       LEFT JOIN ET0001県 p ON s.県CD = p.県CD
-      WHERE s.仕入先名 LIKE @search OR s.仕入先名カナ LIKE @search
+      WHERE s.取引終了 = 2
+        AND (s.仕入先名 LIKE @search OR s.仕入先名カナ LIKE @search)
       ORDER BY s.仕入先CD
     `);
   res.json(result.recordset);
