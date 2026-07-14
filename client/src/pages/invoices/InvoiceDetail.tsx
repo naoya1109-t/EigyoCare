@@ -52,7 +52,18 @@ export default function InvoiceDetail() {
             <div className="text-slate-500">今回請求残高</div>
             <div>{data.balance.toLocaleString()}</div>
           </div>
-          <DataTable columns={lineColumns} rows={data.lines} rowKey={(r) => r.lineNumber} />
+          <DataTable
+            columns={lineColumns}
+            rows={data.lines}
+            rowKey={(r) => r.lineNumber}
+            theme={{
+              border: "border-[#E9A580]",
+              header: "bg-[#DE6E34] text-white",
+              oddRow: "bg-[#F9E1D4]",
+              evenRow: "bg-white",
+              rowHover: "hover:bg-[#f3cbb3]",
+            }}
+          />
         </>
       )}
     </AppLayout>
