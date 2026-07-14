@@ -34,7 +34,16 @@ export default function SalesComparison() {
     { key: "repName", header: "担当者" },
     { key: "current", header: "今期", align: "right", render: (r) => formatValue(r.current, mode) },
     { key: "prior", header: "前期", align: "right", render: (r) => formatValue(r.prior, mode) },
-    { key: "ratio", header: "比率", align: "right", render: (r) => `${r.ratio.toFixed(1)}%` },
+    {
+      key: "ratio",
+      header: "比率",
+      align: "right",
+      render: (r) => (
+        <span className={r.ratio >= 100 ? "font-semibold text-emerald-600" : "font-semibold text-red-600"}>
+          {r.ratio.toFixed(1)}%
+        </span>
+      ),
+    },
   ];
 
   return (
