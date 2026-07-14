@@ -125,7 +125,18 @@ export default function SupplierDetail() {
           </div>
           <div className="w-full max-w-sm">
             <h2 className="mb-2 text-sm font-semibold text-slate-600">買掛推移（直近12ヶ月）</h2>
-            <DataTable columns={payableColumns} rows={payables} rowKey={(r) => r.yearMonth} />
+            <DataTable
+              columns={payableColumns}
+              rows={payables}
+              rowKey={(r) => r.yearMonth}
+              theme={{
+                border: "border-[#1C6836]",
+                header: "bg-[#1C6836] text-white",
+                oddRow: "bg-[#BEDFC0]",
+                evenRow: "bg-white",
+                rowHover: "hover:bg-[#a9d3ac]",
+              }}
+            />
           </div>
         </div>
       )}
