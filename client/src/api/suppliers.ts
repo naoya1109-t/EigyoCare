@@ -36,3 +36,14 @@ export function fetchSuppliers(search: string): Promise<SupplierListItem[]> {
 export function fetchSupplierDetail(code: string): Promise<SupplierDetail> {
   return apiFetch<SupplierDetail>(`/suppliers/${code}`);
 }
+
+export interface SupplierPayableRow {
+  yearMonth: string;
+  purchaseAmount: number;
+  paymentAmount: number;
+  balance: number;
+}
+
+export function fetchSupplierPayables(code: string): Promise<SupplierPayableRow[]> {
+  return apiFetch<SupplierPayableRow[]>(`/suppliers/${code}/payables`);
+}

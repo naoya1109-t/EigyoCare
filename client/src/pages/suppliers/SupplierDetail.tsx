@@ -1,7 +1,13 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../../components/AppLayout";
-import { fetchSupplierDetail, SupplierDetail as SupplierDetailType } from "../../api/suppliers";
+import DataTable, { Column } from "../../components/DataTable";
+import {
+  fetchSupplierDetail,
+  fetchSupplierPayables,
+  SupplierDetail as SupplierDetailType,
+  SupplierPayableRow,
+} from "../../api/suppliers";
 import { getCurrentUser } from "../../api/session";
 import { ApiError } from "../../api/client";
 
@@ -49,10 +55,22 @@ function HomepageLink({ url }: { url: string | null }) {
   );
 }
 
+function formatYearMonth(yearMonth: string): string {
+  return yearMonth.length === 6 ? `${yearMonth.slice(0, 4)}-${yearMonth.slice(4)}` : yearMonth;
+}
+
+const payableColumns: Column<SupplierPayableRow>[] = [
+  { key: "yearMonth", header: "年月", render: (r) => formatYearMonth(r.yearMonth) },
+  { key: "paymentAmount", header: "支払額", align: "right", render: (r) => r.paymentAmount.toLocaleString() },
+  { key: "purchaseAmount", header: "仕入額", align: "right", render: (r) => r.purchaseAmount.toLocaleString() },
+  { key: "balance", header: "買掛残", align: "right", render: (r) => r.balance.toLocaleString() },
+];
+
 export default function SupplierDetail() {
   const { code } = useParams<{ code: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<SupplierDetailType | null>(null);
+  const [payables, setPayables] = useState<SupplierPayableRow[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -60,6 +78,9 @@ export default function SupplierDetail() {
     fetchSupplierDetail(code)
       .then(setData)
       .catch((err) => setError(err instanceof ApiError ? err.message : "取得に失敗しました"));
+    fetchSupplierPayables(code)
+      .then(setPayables)
+      .catch(() => undefined);
   }, [code]);
 
   return (
@@ -77,29 +98,35 @@ export default function SupplierDetail() {
       {error && <p className="text-sm text-red-600">{error}</p>}
       {!error && !data && <p className="text-sm text-slate-500">読み込み中...</p>}
       {data && (
-        <div className="w-full max-w-[480px] rounded border border-[#799BC6] bg-white px-4 py-3">
-          <Row label="仕入先名" value={data.supplierName} />
-          <Row label="フリガナ" value={data.supplierNameKana} />
-          <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
-          <Row label="都道府県" value={data.prefecture} />
-          <Row label="住所1" value={data.address1} />
-          <Row label="住所2" value={data.address2} />
-          <Row
-            label="TEL / FAX"
-            value={
-              <>
-                <TelLink tel={data.tel} /> / {data.fax ?? "-"}
-              </>
-            }
-          />
-          <Row label="HP" value={<HomepageLink url={data.homepage} />} />
-          <Row label="代表者氏名" value={data.representativeName} />
-          <Row label="担当者部署" value={data.contactDept} />
-          <Row label="担当者役職" value={data.contactTitle} />
-          <Row label="担当者名" value={data.contactName} />
-          <Row label="担当者TEL" value={<TelLink tel={data.contactTel} />} />
-          <Row label="EMail" value={<MailLink email={data.email} />} />
-          <Row label="備考" value={data.remarks} />
+        <div className="flex flex-wrap items-start gap-4">
+          <div className="w-full max-w-[480px] rounded border border-[#799BC6] bg-white px-4 py-3">
+            <Row label="仕入先名" value={data.supplierName} />
+            <Row label="フリガナ" value={data.supplierNameKana} />
+            <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
+            <Row label="都道府県" value={data.prefecture} />
+            <Row label="住所1" value={data.address1} />
+            <Row label="住所2" value={data.address2} />
+            <Row
+              label="TEL / FAX"
+              value={
+                <>
+                  <TelLink tel={data.tel} /> / {data.fax ?? "-"}
+                </>
+              }
+            />
+            <Row label="HP" value={<HomepageLink url={data.homepage} />} />
+            <Row label="代表者氏名" value={data.representativeName} />
+            <Row label="担当者部署" value={data.contactDept} />
+            <Row label="担当者役職" value={data.contactTitle} />
+            <Row label="担当者名" value={data.contactName} />
+            <Row label="担当者TEL" value={<TelLink tel={data.contactTel} />} />
+            <Row label="EMail" value={<MailLink email={data.email} />} />
+            <Row label="備考" value={data.remarks} />
+          </div>
+          <div className="w-full max-w-sm">
+            <h2 className="mb-2 text-sm font-semibold text-slate-600">買掛推移（直近12ヶ月）</h2>
+            <DataTable columns={payableColumns} rows={payables} rowKey={(r) => r.yearMonth} />
+          </div>
         </div>
       )}
     </AppLayout>
