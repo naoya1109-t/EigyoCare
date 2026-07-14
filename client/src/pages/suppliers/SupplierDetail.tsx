@@ -34,6 +34,16 @@ function MailLink({ email }: { email: string | null }) {
   );
 }
 
+function HomepageLink({ url }: { url: string | null }) {
+  if (!url) return <>-</>;
+  const href = /^https?:\/\//i.test(url) ? url : `https://${url}`;
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+      {url}
+    </a>
+  );
+}
+
 export default function SupplierDetail() {
   const { code } = useParams<{ code: string }>();
   const navigate = useNavigate();
@@ -77,7 +87,7 @@ export default function SupplierDetail() {
               </>
             }
           />
-          <Row label="HP" value={data.homepage} />
+          <Row label="HP" value={<HomepageLink url={data.homepage} />} />
           <Row label="代表者氏名" value={data.representativeName} />
           <Row label="担当者部署" value={data.contactDept} />
           <Row label="担当者役職" value={data.contactTitle} />
