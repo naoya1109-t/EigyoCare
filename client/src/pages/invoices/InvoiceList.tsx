@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AppLayout from "../../components/AppLayout";
 import DataTable, { Column } from "../../components/DataTable";
 import { FilterForm, TextField } from "../../components/FilterForm";
@@ -8,7 +8,9 @@ import { getCurrentUser } from "../../api/session";
 
 export default function InvoiceList() {
   const navigate = useNavigate();
-  const [customerCode, setCustomerCode] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [customerCode, setCustomerCode] = useState(searchParams.get("customerCode") ?? "");
+  const [customerName, setCustomerName] = useState(searchParams.get("customerName") ?? "");
   const [rows, setRows] = useState<InvoiceListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,13 +18,19 @@ export default function InvoiceList() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(true);
-      fetchInvoices(customerCode)
+      const params: Record<string, string> = {};
+      if (customerCode) params.customerCode = customerCode;
+      if (customerName) params.customerName = customerName;
+      setSearchParams(params, { replace: true });
+
+      fetchInvoices({ customerCode, customerName })
         .then(setRows)
         .catch(() => setError("請求情報の取得に失敗しました"))
         .finally(() => setLoading(false));
     }, 300);
     return () => clearTimeout(timer);
-  }, [customerCode]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customerCode, customerName]);
 
   const columns: Column<InvoiceListItem>[] = [
     {
@@ -45,6 +53,7 @@ export default function InvoiceList() {
       <h1 className="mb-4 text-xl font-bold text-slate-800">請求情報</h1>
       <FilterForm>
         <TextField label="得意先コード" value={customerCode} onChange={setCustomerCode} placeholder="例: 1" />
+        <TextField label="得意先名" value={customerName} onChange={setCustomerName} placeholder="得意先名で検索" />
       </FilterForm>
       {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
       {loading ? (

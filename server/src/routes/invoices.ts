@@ -8,9 +8,11 @@ invoicesRouter.use(requireAuth);
 
 invoicesRouter.get("/invoices", async (req, res) => {
   const customerCode = req.query.customerCode ? Number(req.query.customerCode) : undefined;
+  const customerName = typeof req.query.customerName === "string" ? req.query.customerName : undefined;
   const pool = await getReadonlyPool();
   const request = pool.request();
   if (customerCode !== undefined) request.input("customerCode", sql.Int, customerCode);
+  if (customerName !== undefined) request.input("customerName", sql.NVarChar, `%${customerName}%`);
   const result = await request.query(`
     SELECT TOP 200
       i.請求番号 AS invoiceNo,
@@ -23,7 +25,9 @@ invoicesRouter.get("/invoices", async (req, res) => {
       i.今回請求残高 AS balance
     FROM ET0110請求 i
     JOIN ET0020得意先 c ON i.得意先CD = c.得意先CD
-    WHERE 1=1 ${customerCode !== undefined ? "AND i.得意先CD = @customerCode" : ""}
+    WHERE 1=1
+      ${customerCode !== undefined ? "AND i.得意先CD = @customerCode" : ""}
+      ${customerName !== undefined ? "AND c.得意先名 LIKE @customerName" : ""}
     ORDER BY i.請求日 DESC
   `);
   res.json(result.recordset);

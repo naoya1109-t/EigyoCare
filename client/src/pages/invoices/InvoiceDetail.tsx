@@ -30,7 +30,7 @@ export default function InvoiceDetail() {
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
-      <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate("/invoices")}>
+      <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate(-1)}>
         ← 請求情報一覧へ戻る
       </button>
       <h1 className="mb-4 text-xl font-bold text-slate-800">請求明細</h1>

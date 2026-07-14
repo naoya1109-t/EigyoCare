@@ -35,9 +35,17 @@ export interface InvoiceDetail {
   lines: InvoiceLine[];
 }
 
-export function fetchInvoices(customerCode: string): Promise<InvoiceListItem[]> {
-  const query = customerCode ? `?customerCode=${encodeURIComponent(customerCode)}` : "";
-  return apiFetch<InvoiceListItem[]>(`/invoices${query}`);
+export interface InvoiceFilters {
+  customerCode: string;
+  customerName: string;
+}
+
+export function fetchInvoices(filters: InvoiceFilters): Promise<InvoiceListItem[]> {
+  const params = new URLSearchParams();
+  if (filters.customerCode) params.set("customerCode", filters.customerCode);
+  if (filters.customerName) params.set("customerName", filters.customerName);
+  const query = params.toString();
+  return apiFetch<InvoiceListItem[]>(`/invoices${query ? `?${query}` : ""}`);
 }
 
 export function fetchInvoiceDetail(no: string): Promise<InvoiceDetail> {
