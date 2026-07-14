@@ -34,6 +34,11 @@ function MailLink({ email }: { email: string | null }) {
   );
 }
 
+function formatZipCode(zipCode: string | null): string | null {
+  if (!zipCode) return zipCode;
+  return /^\d{7}$/.test(zipCode) ? `${zipCode.slice(0, 3)}-${zipCode.slice(3)}` : zipCode;
+}
+
 function HomepageLink({ url }: { url: string | null }) {
   if (!url) return <>-</>;
   const href = /^https?:\/\//i.test(url) ? url : `https://${url}`;
@@ -75,7 +80,7 @@ export default function SupplierDetail() {
         <div className="w-full max-w-[480px] rounded border border-[#799BC6] bg-white px-4 py-3">
           <Row label="仕入先名" value={data.supplierName} />
           <Row label="フリガナ" value={data.supplierNameKana} />
-          <Row label="郵便番号" value={data.zipCode} />
+          <Row label="郵便番号" value={formatZipCode(data.zipCode)} />
           <Row label="都道府県" value={data.prefecture} />
           <Row label="住所1" value={data.address1} />
           <Row label="住所2" value={data.address2} />
