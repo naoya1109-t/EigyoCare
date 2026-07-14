@@ -7,9 +7,11 @@ import { ApiError } from "../../api/client";
 
 function Row({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="flex border-b border-slate-100 py-2 text-sm">
-      <div className="w-32 shrink-0 text-slate-500">{label}</div>
-      <div className="whitespace-pre-wrap text-slate-800">{value ?? "-"}</div>
+    <div className="flex py-1 text-sm">
+      <div className="w-24 shrink-0 border-b-2 border-[#799BC6] pb-1 text-slate-500">{label}</div>
+      <div className="flex-1 whitespace-pre-wrap border-b-2 border-slate-300 pb-1 pl-3 text-slate-800">
+        {value ?? "-"}
+      </div>
     </div>
   );
 }
@@ -47,15 +49,20 @@ export default function SupplierDetail() {
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
-      <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate("/suppliers")}>
+      <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate(-1)}>
         ← 仕入先情報一覧へ戻る
       </button>
-      <h1 className="mb-4 text-xl font-bold text-slate-800">仕入先詳細</h1>
+      <div className="mb-4 flex items-center gap-2">
+        {data && (
+          <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
+            仕入先CD: {data.supplierCode}
+          </span>
+        )}
+      </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
       {!error && !data && <p className="text-sm text-slate-500">読み込み中...</p>}
       {data && (
-        <div className="max-w-xl rounded border border-slate-200 bg-white p-6">
-          <Row label="仕入先CD" value={data.supplierCode} />
+        <div className="w-full max-w-[480px] rounded border border-[#799BC6] bg-white px-4 py-3">
           <Row label="仕入先名" value={data.supplierName} />
           <Row label="フリガナ" value={data.supplierNameKana} />
           <Row label="郵便番号" value={data.zipCode} />
