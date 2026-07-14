@@ -15,6 +15,7 @@ export interface InvoiceLine {
   lineNumber: number;
   saleDate: string;
   item: string | null;
+  spec: string | null;
   quantity: number | null;
   unitPrice: number | null;
   amount: number | null;

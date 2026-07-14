@@ -8,7 +8,11 @@ import { ApiError } from "../../api/client";
 
 const lineColumns: Column<InvoiceLine>[] = [
   { key: "saleDate", header: "売上日", render: (r) => r.saleDate.slice(0, 10) },
-  { key: "item", header: "商品名" },
+  {
+    key: "item",
+    header: "商品名",
+    render: (r) => [r.item, r.spec?.trim()].filter((v) => v && v.length > 0).join(" / "),
+  },
   { key: "quantity", header: "数量", align: "right" },
   { key: "unitPrice", header: "単価", align: "right", render: (r) => r.unitPrice?.toLocaleString() ?? "" },
   { key: "amount", header: "金額", align: "right", render: (r) => r.amount?.toLocaleString() ?? "" },

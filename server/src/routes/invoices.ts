@@ -77,6 +77,7 @@ invoicesRouter.get("/invoices/:no", async (req, res) => {
         請求明細番号 AS lineNumber,
         売上日 AS saleDate,
         商品名 AS item,
+        規格 AS spec,
         受注数量 AS quantity,
         販売単価 AS unitPrice,
         販売金額 AS amount,
