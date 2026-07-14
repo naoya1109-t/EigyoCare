@@ -41,6 +41,7 @@ export default function PaymentList() {
   }, [search, showAll, repCode]);
 
   const columns: Column<PaymentListItem>[] = [
+    { key: "customerCode", header: "得意先CD" },
     {
       key: "customerName",
       header: "得意先名",
