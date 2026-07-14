@@ -40,8 +40,7 @@ export function fetchSupplierDetail(code: string): Promise<SupplierDetail> {
 export interface SupplierPayableRow {
   yearMonth: string;
   purchaseAmount: number;
-  paymentAmount: number;
-  balance: number;
+  discountAmount: number;
 }
 
 export function fetchSupplierPayables(code: string): Promise<SupplierPayableRow[]> {

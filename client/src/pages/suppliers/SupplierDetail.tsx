@@ -61,9 +61,8 @@ function formatYearMonth(yearMonth: string): string {
 
 const payableColumns: Column<SupplierPayableRow>[] = [
   { key: "yearMonth", header: "年月", render: (r) => formatYearMonth(r.yearMonth) },
-  { key: "paymentAmount", header: "支払額", align: "right", render: (r) => r.paymentAmount.toLocaleString() },
   { key: "purchaseAmount", header: "仕入額", align: "right", render: (r) => r.purchaseAmount.toLocaleString() },
-  { key: "balance", header: "買掛残", align: "right", render: (r) => r.balance.toLocaleString() },
+  { key: "discountAmount", header: "値引額", align: "right", render: (r) => r.discountAmount.toLocaleString() },
 ];
 
 export default function SupplierDetail() {

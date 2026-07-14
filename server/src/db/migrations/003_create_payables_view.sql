@@ -11,6 +11,7 @@ BEGIN
             仕入先CD AS 仕入先CD,
             年月 AS 年月,
             仕入額 AS 仕入額,
+            値引額 AS 値引額,
             支払額 AS 支払額,
             今回買掛残高 AS 今回買掛残高
         FROM dbo.ET0135買掛
@@ -24,6 +25,7 @@ BEGIN
             仕入先CD AS 仕入先CD,
             年月 AS 年月,
             仕入額 AS 仕入額,
+            値引額 AS 値引額,
             支払額 AS 支払額,
             今回買掛残高 AS 今回買掛残高
         FROM dbo.ET0135買掛
