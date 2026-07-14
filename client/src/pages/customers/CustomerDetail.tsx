@@ -97,10 +97,10 @@ export default function CustomerDetail() {
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
       <button className="mb-4 text-sm text-blue-600 hover:underline" onClick={() => navigate(-1)}>
-        ← 顧客情報一覧へ戻る
+        ← 得意先情報一覧へ戻る
       </button>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="text-xl font-bold text-slate-800">顧客詳細</h1>
+        <h1 className="text-xl font-bold text-slate-800">得意先詳細</h1>
         {data && (
           <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
             得意先CD: {data.customerCode}

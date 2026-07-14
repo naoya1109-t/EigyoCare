@@ -43,7 +43,7 @@ export default function CustomerList() {
 
       fetchCustomers({ search, prefectureCode, repCode })
         .then(setRows)
-        .catch(() => setError("顧客情報の取得に失敗しました"))
+        .catch(() => setError("得意先情報の取得に失敗しました"))
         .finally(() => setLoading(false));
     }, 300);
     return () => clearTimeout(timer);
@@ -52,7 +52,7 @@ export default function CustomerList() {
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
-      <h1 className="mb-4 text-xl font-bold text-slate-800">顧客情報</h1>
+      <h1 className="mb-4 text-xl font-bold text-slate-800">得意先情報</h1>
       <FilterForm>
         <TextField label="得意先名検索" value={search} onChange={setSearch} placeholder="得意先名またはカナ" />
         <SelectField
