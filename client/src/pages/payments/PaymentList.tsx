@@ -47,7 +47,12 @@ export default function PaymentList() {
     },
     { key: "dueDate", header: "支払期日", render: (r) => r.dueDate?.slice(0, 10) ?? "-" },
     { key: "previousInvoice", header: "前回請求", align: "right", render: (r) => r.previousInvoice.toLocaleString() },
-    { key: "previousPayment", header: "前回入金", align: "right", render: (r) => r.previousPayment.toLocaleString() },
+    {
+      key: "afterInvoicePayment",
+      header: "入金額",
+      align: "right",
+      render: (r) => r.afterInvoicePayment.toLocaleString(),
+    },
     {
       key: "outstandingAmount",
       header: "未入金額",

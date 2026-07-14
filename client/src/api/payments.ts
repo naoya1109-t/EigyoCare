@@ -5,7 +5,7 @@ export interface PaymentListItem {
   customerName: string;
   dueDate: string | null;
   previousInvoice: number;
-  previousPayment: number;
+  afterInvoicePayment: number;
   outstandingAmount: number;
   isOverdue: boolean;
 }
