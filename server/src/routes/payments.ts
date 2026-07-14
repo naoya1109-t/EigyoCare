@@ -35,7 +35,6 @@ const TARGET_INVOICE_CTE = `
 
 paymentsRouter.get("/payments", async (req, res) => {
   const search = typeof req.query.search === "string" ? req.query.search : "";
-  const showAll = req.query.all === "true";
   const repCode = req.query.repCode ? Number(req.query.repCode) : undefined;
   const pool = await getReadonlyPool();
   const request = pool.request().input("search", sql.NVarChar, `%${search}%`);
@@ -57,7 +56,8 @@ paymentsRouter.get("/payments", async (req, res) => {
         FROM ET0150入金 pm
         WHERE pm.得意先CD = t.得意先CD AND pm.入金日 > t.請求日
       ) pay
-      WHERE c.得意先名 LIKE @search
+      WHERE c.検索対象外 = 2
+        AND c.得意先名 LIKE @search
         ${repCode !== undefined ? "AND c.営業担当CD = @repCode" : ""}
     `);
 
@@ -75,7 +75,7 @@ paymentsRouter.get("/payments", async (req, res) => {
     };
   });
 
-  const filtered = showAll ? rows : rows.filter((r) => r.isOverdue);
+  const filtered = rows.filter((r) => r.isOverdue);
   filtered.sort((a, b) => a.dueDate.localeCompare(b.dueDate));
   res.json(filtered);
 });

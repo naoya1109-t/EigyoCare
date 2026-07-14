@@ -38,14 +38,12 @@ export interface PaymentDetail {
 
 export interface PaymentFilters {
   search: string;
-  showAll: boolean;
   repCode: string;
 }
 
 export function fetchPayments(filters: PaymentFilters): Promise<PaymentListItem[]> {
   const params = new URLSearchParams();
   if (filters.search) params.set("search", filters.search);
-  if (filters.showAll) params.set("all", "true");
   if (filters.repCode) params.set("repCode", filters.repCode);
   const query = params.toString();
   return apiFetch<PaymentListItem[]>(`/payments${query ? `?${query}` : ""}`);
