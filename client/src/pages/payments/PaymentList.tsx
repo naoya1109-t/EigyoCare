@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AppLayout from "../../components/AppLayout";
 import DataTable, { Column } from "../../components/DataTable";
-import { FilterForm, TextField } from "../../components/FilterForm";
+import { FilterForm, TextField, SelectField } from "../../components/FilterForm";
 import { fetchPayments, PaymentListItem } from "../../api/payments";
+import { fetchReps, Rep } from "../../api/reference";
 import { getCurrentUser } from "../../api/session";
 
 export default function PaymentList() {
@@ -11,9 +12,15 @@ export default function PaymentList() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
   const [showAll, setShowAll] = useState(searchParams.get("all") === "true");
+  const [repCode, setRepCode] = useState(searchParams.get("repCode") ?? "");
+  const [reps, setReps] = useState<Rep[]>([]);
   const [rows, setRows] = useState<PaymentListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchReps().then(setReps).catch(() => undefined);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -21,16 +28,17 @@ export default function PaymentList() {
       const params: Record<string, string> = {};
       if (search) params.search = search;
       if (showAll) params.all = "true";
+      if (repCode) params.repCode = repCode;
       setSearchParams(params, { replace: true });
 
-      fetchPayments(search, showAll)
+      fetchPayments({ search, showAll, repCode })
         .then(setRows)
         .catch(() => setError("入金確認の取得に失敗しました"))
         .finally(() => setLoading(false));
     }, 300);
     return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search, showAll]);
+  }, [search, showAll, repCode]);
 
   const columns: Column<PaymentListItem>[] = [
     {
@@ -45,6 +53,7 @@ export default function PaymentList() {
         </button>
       ),
     },
+    { key: "repName", header: "担当者", render: (r) => r.repName ?? "-" },
     { key: "dueDate", header: "支払期日", render: (r) => r.dueDate?.slice(0, 10) ?? "-" },
     { key: "previousInvoice", header: "前回請求", align: "right", render: (r) => r.previousInvoice.toLocaleString() },
     {
@@ -68,6 +77,15 @@ export default function PaymentList() {
       </h1>
       <FilterForm>
         <TextField label="得意先名検索" value={search} onChange={setSearch} />
+        <SelectField
+          label="担当者"
+          value={repCode}
+          onChange={setRepCode}
+          options={[
+            { value: "", label: "すべて" },
+            ...reps.map((r) => ({ value: String(r.repCode), label: r.repName })),
+          ]}
+        />
         <label className="flex items-center gap-2 pb-1.5 text-sm text-slate-600">
           <input type="checkbox" checked={showAll} onChange={(e) => setShowAll(e.target.checked)} />
           全件表示

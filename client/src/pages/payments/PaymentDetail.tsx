@@ -38,6 +38,7 @@ export default function PaymentDetail() {
       {data && (
         <div className="max-w-xl rounded border border-slate-200 bg-white p-6">
           <Row label="得意先" value={data.customerName} />
+          <Row label="担当者" value={data.repName} />
           <Row
             label="支払期日"
             value={

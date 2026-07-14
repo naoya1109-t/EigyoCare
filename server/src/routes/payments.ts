@@ -26,14 +26,15 @@ function computeDueDate(closingDate: Date | null, cycle: number | null, day: num
 paymentsRouter.get("/payments", async (req, res) => {
   const search = typeof req.query.search === "string" ? req.query.search : "";
   const showAll = req.query.all === "true";
+  const repCode = req.query.repCode ? Number(req.query.repCode) : undefined;
   const pool = await getReadonlyPool();
-  const result = await pool
-    .request()
-    .input("search", sql.NVarChar, `%${search}%`)
-    .query(`
+  const request = pool.request().input("search", sql.NVarChar, `%${search}%`);
+  if (repCode !== undefined) request.input("repCode", sql.SmallInt, repCode);
+  const result = await request.query(`
       SELECT
         p.得意先CD AS customerCode,
         c.得意先名 AS customerName,
+        r.担当者名 AS repName,
         p.回収サイクル AS collectionCycle,
         p.回収日 AS collectionDay,
         p.前回請求締日 AS previousClosingDate,
@@ -41,7 +42,9 @@ paymentsRouter.get("/payments", async (req, res) => {
         p.請求後入金 AS afterInvoicePayment
       FROM ET0160入金確認 p
       JOIN ET0020得意先 c ON p.得意先CD = c.得意先CD
+      LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
       WHERE c.得意先名 LIKE @search
+        ${repCode !== undefined ? "AND c.営業担当CD = @repCode" : ""}
       ORDER BY p.得意先CD
     `);
 
@@ -53,6 +56,7 @@ paymentsRouter.get("/payments", async (req, res) => {
     return {
       customerCode: r.customerCode,
       customerName: r.customerName,
+      repName: r.repName,
       dueDate: dueDate ? dueDate.toISOString() : null,
       previousInvoice: r.previousInvoice,
       afterInvoicePayment: r.afterInvoicePayment,
@@ -80,6 +84,7 @@ paymentsRouter.get("/payments/:customerCode", async (req, res) => {
       SELECT
         p.得意先CD AS customerCode,
         c.得意先名 AS customerName,
+        r.担当者名 AS repName,
         p.回収サイクル AS collectionCycle,
         p.回収日 AS collectionDay,
         p.今回入金 AS currentPayment,
@@ -98,6 +103,7 @@ paymentsRouter.get("/payments/:customerCode", async (req, res) => {
         p.前回請求締日 AS previousClosingDate
       FROM ET0160入金確認 p
       JOIN ET0020得意先 c ON p.得意先CD = c.得意先CD
+      LEFT JOIN ET0010担当者 r ON c.営業担当CD = r.担当者CD
       WHERE p.得意先CD = @customerCode
     `);
   const row = result.recordset[0];

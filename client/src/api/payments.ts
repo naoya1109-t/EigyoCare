@@ -3,6 +3,7 @@ import { apiFetch } from "./client";
 export interface PaymentListItem {
   customerCode: number;
   customerName: string;
+  repName: string | null;
   dueDate: string | null;
   previousInvoice: number;
   afterInvoicePayment: number;
@@ -13,6 +14,7 @@ export interface PaymentListItem {
 export interface PaymentDetail {
   customerCode: number;
   customerName: string;
+  repName: string | null;
   collectionCycle: number | null;
   collectionDay: number | null;
   currentPayment: number;
@@ -34,10 +36,17 @@ export interface PaymentDetail {
   isOverdue: boolean;
 }
 
-export function fetchPayments(search: string, showAll: boolean): Promise<PaymentListItem[]> {
+export interface PaymentFilters {
+  search: string;
+  showAll: boolean;
+  repCode: string;
+}
+
+export function fetchPayments(filters: PaymentFilters): Promise<PaymentListItem[]> {
   const params = new URLSearchParams();
-  if (search) params.set("search", search);
-  if (showAll) params.set("all", "true");
+  if (filters.search) params.set("search", filters.search);
+  if (filters.showAll) params.set("all", "true");
+  if (filters.repCode) params.set("repCode", filters.repCode);
   const query = params.toString();
   return apiFetch<PaymentListItem[]>(`/payments${query ? `?${query}` : ""}`);
 }
