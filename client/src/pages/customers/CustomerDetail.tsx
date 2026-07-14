@@ -100,7 +100,6 @@ export default function CustomerDetail() {
         ← 得意先情報一覧へ戻る
       </button>
       <div className="mb-4 flex items-center gap-2">
-        <h1 className="text-xl font-bold text-slate-800">得意先詳細</h1>
         {data && (
           <span className="rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
             得意先CD: {data.customerCode}
