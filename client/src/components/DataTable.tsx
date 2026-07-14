@@ -29,6 +29,7 @@ interface DataTableProps<T> {
   rowKey: (row: T) => string | number;
   emptyMessage?: string;
   theme?: Partial<DataTableTheme>;
+  rowClassName?: (row: T) => string;
 }
 
 export default function DataTable<T>({
@@ -37,6 +38,7 @@ export default function DataTable<T>({
   rowKey,
   emptyMessage = "データがありません",
   theme,
+  rowClassName,
 }: DataTableProps<T>) {
   const t = { ...DEFAULT_THEME, ...theme };
 
@@ -61,7 +63,10 @@ export default function DataTable<T>({
         </thead>
         <tbody>
           {rows.map((row, i) => (
-            <tr key={rowKey(row)} className={`${i % 2 === 1 ? t.evenRow : t.oddRow} ${t.rowHover}`}>
+            <tr
+              key={rowKey(row)}
+              className={`${i % 2 === 1 ? t.evenRow : t.oddRow} ${t.rowHover} ${rowClassName ? rowClassName(row) : ""}`}
+            >
               {columns.map((col) => (
                 <td
                   key={col.key}
