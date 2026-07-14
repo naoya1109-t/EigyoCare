@@ -83,7 +83,7 @@ invoicesRouter.get("/invoices/:no", async (req, res) => {
         行備考 AS remarks
       FROM ET0120請求明細
       WHERE 請求番号 = @no
-      ORDER BY 請求明細番号
+      ORDER BY 売上日, 種別区分, 伝票番号
     `);
 
   res.json({ ...header, lines: linesResult.recordset });
