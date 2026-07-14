@@ -57,7 +57,7 @@ export default function SalesComparison() {
           columns={columns}
           rows={rows}
           rowKey={(r) => r.repCode}
-          rowClassName={(r) => (r.ratio < 100 ? "text-red-600 font-semibold" : "")}
+          rowClassName={(r) => (r.ratio < 100 ? "text-red-600 font-semibold !bg-[#DAE9F7]" : "")}
         />
       )}
     </AppLayout>
