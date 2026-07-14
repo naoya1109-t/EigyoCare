@@ -41,10 +41,11 @@ export default function PaymentList() {
   }, [search, showAll, repCode]);
 
   const columns: Column<PaymentListItem>[] = [
-    { key: "customerCode", header: "得意先CD" },
+    { key: "customerCode", header: "得意先CD", cellClassName: "!pr-1" },
     {
       key: "customerName",
       header: "得意先名",
+      cellClassName: "!pl-1",
       render: (row) => (
         <button
           className="text-blue-600 hover:underline"

@@ -5,6 +5,7 @@ export interface Column<T> {
   header: string;
   render?: (row: T) => ReactNode;
   align?: "left" | "right";
+  cellClassName?: string;
 }
 
 export interface DataTableTheme {
@@ -70,7 +71,7 @@ export default function DataTable<T>({
               {columns.map((col) => (
                 <td
                   key={col.key}
-                  className={`px-4 py-2 ${col.align === "right" ? "text-right" : "text-left"}`}
+                  className={`px-4 py-2 ${col.align === "right" ? "text-right" : "text-left"} ${col.cellClassName ?? ""}`}
                 >
                   {col.render ? col.render(row) : String((row as Record<string, unknown>)[col.key] ?? "")}
                 </td>
