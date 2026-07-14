@@ -6,12 +6,14 @@ import { requireAuth } from "../middlewares/requireAuth";
 export const salesRouter = Router();
 salesRouter.use(requireAuth);
 
-// 断片的な将来データ（件数が少ない月）を除外した、選択可能な「実績が揃っている月」一覧
+// 断片的な将来データ（件数が少ない月、および前倒しで一部登録されている未来月）を除外した、
+// 選択可能な「実績が揃っている月」一覧
 salesRouter.get("/sales/rep-months", async (_req, res) => {
   const pool = await getReadonlyPool();
   const result = await pool.request().query(`
     SELECT TOP 12 FORMAT(売上年月, 'yyyy-MM') AS month
     FROM ET0100担当者別売上
+    WHERE 売上年月 <= GETDATE()
     GROUP BY FORMAT(売上年月, 'yyyy-MM'), 売上年月
     HAVING COUNT(*) > 30
     ORDER BY 売上年月 DESC
@@ -29,6 +31,7 @@ salesRouter.get("/sales/by-rep", async (req, res) => {
     const latest = await pool.request().query(`
       SELECT TOP 1 FORMAT(売上年月, 'yyyy-MM') AS month
       FROM ET0100担当者別売上
+      WHERE 売上年月 <= GETDATE()
       GROUP BY FORMAT(売上年月, 'yyyy-MM'), 売上年月
       HAVING COUNT(*) > 30
       ORDER BY 売上年月 DESC
@@ -57,12 +60,14 @@ salesRouter.get("/sales/by-rep", async (req, res) => {
   res.json(result.recordset);
 });
 
-// 断片的な将来データ（件数が少ない月）を除外した、選択可能な「実績が揃っている月」一覧
+// 断片的な将来データ（件数が少ない月、および前倒しで一部登録されている未来月）を除外した、
+// 選択可能な「実績が揃っている月」一覧
 salesRouter.get("/sales/prefecture-months", async (_req, res) => {
   const pool = await getReadonlyPool();
   const result = await pool.request().query(`
     SELECT TOP 12 FORMAT(売上年月, 'yyyy-MM') AS month
     FROM ET0140県別担当者別売上
+    WHERE 売上年月 <= GETDATE()
     GROUP BY FORMAT(売上年月, 'yyyy-MM'), 売上年月
     HAVING COUNT(*) > 60
     ORDER BY 売上年月 DESC
@@ -81,6 +86,7 @@ salesRouter.get("/sales/by-prefecture", async (req, res) => {
     const latest = await pool.request().query(`
       SELECT TOP 1 FORMAT(売上年月, 'yyyy-MM') AS month
       FROM ET0140県別担当者別売上
+      WHERE 売上年月 <= GETDATE()
       GROUP BY FORMAT(売上年月, 'yyyy-MM'), 売上年月
       HAVING COUNT(*) > 60
       ORDER BY 売上年月 DESC
