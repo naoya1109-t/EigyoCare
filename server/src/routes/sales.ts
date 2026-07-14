@@ -110,18 +110,26 @@ salesRouter.get("/sales/by-prefecture", async (req, res) => {
   res.json(result.recordset);
 });
 
-salesRouter.get("/sales/comparison", async (_req, res) => {
+// 当期(当月1日〜当日)と前年同期の担当者別実績を比較するストアド ES0150営業担当別売上比較 をベースにする。
+// @表示: 1=売上比較, 3=粗利比較, それ以外=粗利率比較（ストアド内部の仕様）
+const COMPARISON_MODE_TO_DISPLAY: Record<string, number> = {
+  sales: 1,
+  profit: 3,
+  margin: 2,
+};
+
+salesRouter.get("/sales/comparison", async (req, res) => {
+  const mode = typeof req.query.mode === "string" ? req.query.mode : "sales";
+  const display = COMPARISON_MODE_TO_DISPLAY[mode] ?? COMPARISON_MODE_TO_DISPLAY.sales;
+
   const pool = await getReadonlyPool();
-  const result = await pool.request().query(`
-    SELECT
-      s.担当者CD AS repCode,
-      r.担当者名 AS repName,
-      s.売上金額 AS salesAmount,
-      s.粗利金額 AS grossProfit
-    FROM ET0100担当者別売上 s
-    JOIN ET0010担当者 r ON s.担当者CD = r.担当者CD
-    WHERE s.売上年月 = (SELECT MAX(売上年月) FROM (SELECT 売上年月 FROM ET0100担当者別売上 GROUP BY 売上年月 HAVING COUNT(*) > 30) t)
-    ORDER BY s.売上金額 DESC
-  `);
-  res.json(result.recordset);
+  const result = await pool.request().input("表示", sql.TinyInt, display).execute("ES0150営業担当別売上比較");
+  const rows = result.recordset.map((r) => ({
+    repCode: r.担当者CD,
+    repName: r.担当者名,
+    current: typeof r.今期 === "number" ? r.今期 : null,
+    prior: typeof r.前期 === "number" ? r.前期 : null,
+    ratio: r.比率,
+  }));
+  res.json(rows);
 });

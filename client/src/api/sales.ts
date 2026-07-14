@@ -14,11 +14,14 @@ export interface PrefectureSalesRow {
   grossProfit: number;
 }
 
+export type ComparisonMode = "sales" | "profit" | "margin";
+
 export interface SalesComparisonRow {
   repCode: number;
   repName: string;
-  salesAmount: number;
-  grossProfit: number;
+  current: number | null;
+  prior: number | null;
+  ratio: number;
 }
 
 export function fetchRepMonths(): Promise<string[]> {
@@ -39,6 +42,6 @@ export function fetchSalesByPrefecture(month: string): Promise<PrefectureSalesRo
   return apiFetch<PrefectureSalesRow[]>(`/sales/by-prefecture${query}`);
 }
 
-export function fetchSalesComparison(): Promise<SalesComparisonRow[]> {
-  return apiFetch<SalesComparisonRow[]>("/sales/comparison");
+export function fetchSalesComparison(mode: ComparisonMode): Promise<SalesComparisonRow[]> {
+  return apiFetch<SalesComparisonRow[]>(`/sales/comparison?mode=${mode}`);
 }
