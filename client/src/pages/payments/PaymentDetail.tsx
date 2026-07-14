@@ -49,6 +49,8 @@ export default function PaymentDetail() {
               )
             }
           />
+          <Row label="対象請求額" value={data.invoiceAmount.toLocaleString()} />
+          <Row label="対象請求への入金" value={data.paymentReceived.toLocaleString()} />
           <Row label="未入金額" value={data.outstandingAmount.toLocaleString()} />
           <Row label="今回請求" value={data.currentInvoice.toLocaleString()} />
           <Row label="今回入金" value={data.currentPayment.toLocaleString()} />

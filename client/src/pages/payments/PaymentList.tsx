@@ -55,12 +55,12 @@ export default function PaymentList() {
     },
     { key: "repName", header: "担当者", render: (r) => r.repName ?? "-" },
     { key: "dueDate", header: "支払期日", render: (r) => r.dueDate?.slice(0, 10) ?? "-" },
-    { key: "previousInvoice", header: "前回請求", align: "right", render: (r) => r.previousInvoice.toLocaleString() },
+    { key: "invoiceAmount", header: "請求額", align: "right", render: (r) => r.invoiceAmount.toLocaleString() },
     {
-      key: "afterInvoicePayment",
+      key: "paymentReceived",
       header: "入金額",
       align: "right",
-      render: (r) => r.afterInvoicePayment.toLocaleString(),
+      render: (r) => r.paymentReceived.toLocaleString(),
     },
     {
       key: "outstandingAmount",

@@ -5,8 +5,8 @@ export interface PaymentListItem {
   customerName: string;
   repName: string | null;
   dueDate: string | null;
-  previousInvoice: number;
-  afterInvoicePayment: number;
+  invoiceAmount: number;
+  paymentReceived: number;
   outstandingAmount: number;
   isOverdue: boolean;
 }
@@ -15,8 +15,6 @@ export interface PaymentDetail {
   customerCode: number;
   customerName: string;
   repName: string | null;
-  collectionCycle: number | null;
-  collectionDay: number | null;
   currentPayment: number;
   currentSales: number;
   currentInvoice: number;
@@ -32,6 +30,8 @@ export interface PaymentDetail {
   afterInvoicePayment: number;
   previousClosingDate: string | null;
   dueDate: string | null;
+  invoiceAmount: number;
+  paymentReceived: number;
   outstandingAmount: number;
   isOverdue: boolean;
 }
