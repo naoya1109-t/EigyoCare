@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import AppLayout from "../../components/AppLayout";
 import DataTable, { Column } from "../../components/DataTable";
 import { FilterForm, TextField } from "../../components/FilterForm";
@@ -15,7 +15,8 @@ const columns: Column<SupplierListItem>[] = [
 
 export default function SupplierList() {
   const navigate = useNavigate();
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search, setSearch] = useState(searchParams.get("search") ?? "");
   const [rows, setRows] = useState<SupplierListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,12 +24,17 @@ export default function SupplierList() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(true);
+      const params: Record<string, string> = {};
+      if (search) params.search = search;
+      setSearchParams(params, { replace: true });
+
       fetchSuppliers(search)
         .then(setRows)
         .catch(() => setError("仕入先情報の取得に失敗しました"))
         .finally(() => setLoading(false));
     }, 300);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   return (
