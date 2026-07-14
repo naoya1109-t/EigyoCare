@@ -12,7 +12,6 @@ import SalesComparison from "./pages/SalesComparison";
 import BudgetProgress from "./pages/BudgetProgress";
 import InvoiceList from "./pages/invoices/InvoiceList";
 import InvoiceDetail from "./pages/invoices/InvoiceDetail";
-import Receivables from "./pages/Receivables";
 import PaymentList from "./pages/payments/PaymentList";
 import PaymentDetail from "./pages/payments/PaymentDetail";
 import Returns from "./pages/Returns";
@@ -46,7 +45,6 @@ export default function App() {
           <Route path="/budget-progress" element={<BudgetProgress />} />
           <Route path="/invoices" element={<InvoiceList />} />
           <Route path="/invoices/:no" element={<InvoiceDetail />} />
-          <Route path="/receivables" element={<Receivables />} />
           <Route path="/payments" element={<PaymentList />} />
           <Route path="/payments/:customerCode" element={<PaymentDetail />} />
           <Route path="/returns" element={<Returns />} />
