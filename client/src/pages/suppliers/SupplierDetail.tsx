@@ -122,7 +122,7 @@ export default function SupplierDetail() {
             <Row label="EMail" value={<MailLink email={data.email} />} />
             <Row label="備考" value={data.remarks} />
           </div>
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-xs">
             <h2 className="mb-2 text-sm font-semibold text-slate-600">買掛推移（直近12ヶ月）</h2>
             <DataTable
               columns={payableColumns}
