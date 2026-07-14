@@ -72,7 +72,10 @@ export default function PaymentList() {
 
   return (
     <AppLayout userName={getCurrentUser()?.userId ?? "ログインユーザー"}>
-      <h1 className="mb-4 text-xl font-bold text-slate-800">入金確認（未入金・期限切れのみ）</h1>
+      <h1 className="mb-4 text-xl font-bold text-slate-800">
+        入金確認（未入金・期限切れのみ）
+        {!loading && <span className="ml-2 text-base font-normal text-slate-500">{rows.length}件</span>}
+      </h1>
       <FilterForm>
         <TextField label="得意先名検索" value={search} onChange={setSearch} />
         <SelectField
